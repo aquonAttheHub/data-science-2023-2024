@@ -11,6 +11,6 @@ University of California, Berkeley
 School of Information
 
 Coursework Completed:
--Statistics for Data Science
--Data Engineering
--Research Design and Applications for Data and Analysis
+* Statistics for Data Science
+* Data Engineering
+* Research Design and Applications for Data and Analysis
