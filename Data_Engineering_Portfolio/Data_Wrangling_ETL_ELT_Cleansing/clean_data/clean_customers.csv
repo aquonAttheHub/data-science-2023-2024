@@ -1,0 +1,51 @@
+customer_id,first_name,last_name,street,city,state,zip,closest_store_id,distance
+563,Rose,Slimings,38 Iowa Street,Berkeley,CA,94704,1,1
+1597,Norry,Macauley,654 Sommers Plaza,Oakland,CA,94612,1,3
+1958,Theresina,Penswick,5975 Twin Pines Hill,Berkeley,CA,94707,1,3
+1991,Kevon,Wickett,472 Arizona Court,Berkeley,CA,94707,1,3
+3491,Siouxie,M'Quharge,747 Westridge Center,Alameda,CA,94501,1,6
+4159,Cheryl,Broe,7 Ruskin Alley,El Sobrante,CA,94803,1,7
+4198,Andreana,Drew,11039 Cordelia Alley,El Sobrante,CA,94803,1,7
+4260,Dom,Risbrough,3 Northland Crossing,Richmond,CA,94805,1,7
+5394,Katharina,Bavester,522 Cordelia Lane,San Francisco,CA,94102,1,10
+6782,Lyndsay,Iuorio,4 Thackeray Road,Walnut Creek,CA,94596,1,12
+9046,Beth,Scotchmor,6070 Merchant Park,Seattle,WA,98112,2,2
+9189,Cornell,Brammar,94261 Sunnyside Junction,Seattle,WA,98112,2,2
+9298,Cecilla,Lewry,987 Kim Terrace,Seattle,WA,98144,2,2
+9528,Markos,Toderi,6434 Mallard Way,Seattle,WA,98119,2,3
+10295,Debby,Leber,1660 Bluejay Circle,Mercer Island,WA,98040,2,5
+11291,Dasi,Radden,18 Hoepker Court,Seattle,WA,98136,2,6
+11779,Emlynne,Takle,1 Johnson Park,Seattle,WA,98125,2,7
+12160,Sim,Dorie,6709 Bayside Hill,Seattle,WA,98146,2,8
+12493,Lula,Stoneman,2 Gateway Center,Kirkland,WA,98034,2,9
+14460,Shannon,Morrall,12076 Lotheville Circle,Port Orchard,WA,98366,2,13
+15481,Raquel,Ansill,57 Fordem Circle,Dallas,TX,75201,3,1
+15710,Ted,Campany,91111 West Road,Dallas,TX,75219,3,1
+15799,Zackariah,McCreath,64828 Farwell Terrace,Dallas,TX,75219,3,1
+16476,Yancey,Lamyman,3078 Emmet Junction,Dallas,TX,75206,3,3
+16932,Betta,Swatland,7060 Merchant Pass,Dallas,TX,75210,3,4
+17003,Pryce,Slafford,172 Bunker Hill Drive,Dallas,TX,75210,3,4
+17711,Sheffield,Dunkerton,11 Quincy Parkway,Dallas,TX,75225,3,5
+19226,Christin,Penny,3452 Muir Hill,Dallas,TX,75238,3,8
+19494,Brianne,Dundendale,7 Mcbride Center,Dallas,TX,75240,3,9
+19954,Merell,Cruikshanks,5 Armistice Road,Mesquite,TX,75150,3,10
+22673,Sue,Delepine,117 Hauk Trail,Miami,FL,33137,4,3
+23017,Darb,Goucher,654 Glendale Parkway,Miami,FL,33133,4,4
+23319,Brnaba,Challicombe,22008 Jay Circle,Miami,FL,33142,4,4
+23347,Royce,Fielders,8 Hermina Parkway,Key Biscayne,FL,33149,4,4
+23902,Joice,Chidgey,7996 Loeprich Alley,Miami,FL,33138,4,6
+24014,Michale,Caudle,322 Washington Parkway,Miami Beach,FL,33141,4,6
+25267,Tobin,Pude,70078 Porter Court,Miami,FL,33166,4,9
+25339,Lucilia,Logg,62940 Towne Terrace,Miami,FL,33166,4,9
+26882,Billy,Cattini,6858 Burning Wood Avenue,Miami,FL,33175,4,14
+27380,Juliette,Simoncello,485 Hazelcrest Alley,Fort Lauderdale,FL,33312,4,22
+27654,Nestor,Winfred,593 American Ash Hill,Nashville,TN,37208,5,2
+27728,Gus,Haliburton,11 Sommers Crossing,Nashville,TN,37208,5,2
+27926,Kerrin,Bridel,4582 Roth Street,Nashville,TN,37212,5,2
+27997,Meagan,Gussin,73526 2nd Terrace,Nashville,TN,37212,5,2
+28267,Frederica,Cabrer,99 Rutledge Trail,Nashville,TN,37204,5,4
+28750,Jareb,Girt,316 Saint Paul Point,Nashville,TN,37207,5,5
+29285,Ezmeralda,McCreadie,30 Gulseth Terrace,Nashville,TN,37215,5,6
+29783,Nobie,Nuemann,955 Beilfuss Place,Madison,TN,37115,5,8
+29922,Garwin,Aleksankin,7 Delaware Place,Madison,TN,37115,5,8
+30184,Mindy,Bockh,50432 Sachs Road,Brentwood,TN,37027,5,11

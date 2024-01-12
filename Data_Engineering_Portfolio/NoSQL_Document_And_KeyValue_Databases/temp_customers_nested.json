@@ -1,0 +1,3041 @@
+{
+  "creator": "Acme Gourmet Meals",
+  "timestamp": "2021-09-10 23:03:09",
+  "file_name": "temp_customers_nested.json",
+  "version": "12.4.7",
+  "legal": "Unauthorized use, duplication, or possession, blah, blah",
+  "customers": [
+    {
+      "customer_id": 563,
+      "first_name": "Rose",
+      "last_name": "Slimings",
+      "first_last_name": "Rose Slimings",
+      "last_first_name": "Slimings, Rose",
+      "street": "38 Iowa Street",
+      "city": "Berkeley",
+      "state": "CA",
+      "zip": "94704",
+      "population": 29190,
+      "area": 1.2177,
+      "density": 23972.16,
+      "closest_store_id": 1,
+      "distance": 1,
+      "sales": [
+        {
+          "receipt_number": "001-000255285",
+          "sale_date": "2020-08-29",
+          "sub_total": 36,
+          "tax": 0,
+          "total_amount": 36,
+          "store": {
+            "store_id": 1,
+            "street": "3000 Telegraph Ave",
+            "city": "Berkeley",
+            "state": "CA",
+            "zip": "94705",
+            "latitude": 37.8555,
+            "longitude": -122.2604
+          },
+          "line_items": [
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 1597,
+      "first_name": "Norry",
+      "last_name": "Macauley",
+      "first_last_name": "Norry Macauley",
+      "last_first_name": "Macauley, Norry",
+      "street": "654 Sommers Plaza",
+      "city": "Oakland",
+      "state": "CA",
+      "zip": "94612",
+      "population": 16062,
+      "area": 0.9543,
+      "density": 16831.56,
+      "closest_store_id": 1,
+      "distance": 3,
+      "sales": [
+        {
+          "receipt_number": "001-000144249",
+          "sale_date": "2020-05-16",
+          "sub_total": 84,
+          "tax": 0,
+          "total_amount": 84,
+          "store": {
+            "store_id": 1,
+            "street": "3000 Telegraph Ave",
+            "city": "Berkeley",
+            "state": "CA",
+            "zip": "94705",
+            "latitude": 37.8555,
+            "longitude": -122.2604
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 8,
+              "description": "Brocolli Stir Fry",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 1958,
+      "first_name": "Theresina",
+      "last_name": "Penswick",
+      "first_last_name": "Theresina Penswick",
+      "last_first_name": "Penswick, Theresina",
+      "street": "5975 Twin Pines Hill",
+      "city": "Berkeley",
+      "state": "CA",
+      "zip": "94707",
+      "population": 11916,
+      "area": 1.7251,
+      "density": 6907.5,
+      "closest_store_id": 1,
+      "distance": 3,
+      "sales": [
+        {
+          "receipt_number": "001-000181897",
+          "sale_date": "2020-06-20",
+          "sub_total": 48,
+          "tax": 0,
+          "total_amount": 48,
+          "store": {
+            "store_id": 1,
+            "street": "3000 Telegraph Ave",
+            "city": "Berkeley",
+            "state": "CA",
+            "zip": "94705",
+            "latitude": 37.8555,
+            "longitude": -122.2604
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 8,
+              "description": "Brocolli Stir Fry",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 1991,
+      "first_name": "Kevon",
+      "last_name": "Wickett",
+      "first_last_name": "Kevon Wickett",
+      "last_first_name": "Wickett, Kevon",
+      "street": "472 Arizona Court",
+      "city": "Berkeley",
+      "state": "CA",
+      "zip": "94707",
+      "population": 11916,
+      "area": 1.7251,
+      "density": 6907.5,
+      "closest_store_id": 1,
+      "distance": 3,
+      "sales": [
+        {
+          "receipt_number": "001-000263524",
+          "sale_date": "2020-09-07",
+          "sub_total": 48,
+          "tax": 0,
+          "total_amount": 48,
+          "store": {
+            "store_id": 1,
+            "street": "3000 Telegraph Ave",
+            "city": "Berkeley",
+            "state": "CA",
+            "zip": "94705",
+            "latitude": 37.8555,
+            "longitude": -122.2604
+          },
+          "line_items": [
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 8,
+              "description": "Brocolli Stir Fry",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 3491,
+      "first_name": "Siouxie",
+      "last_name": "M'Quharge",
+      "first_last_name": "Siouxie M'Quharge",
+      "last_first_name": "M'Quharge, Siouxie",
+      "street": "747 Westridge Center",
+      "city": "Alameda",
+      "state": "CA",
+      "zip": "94501",
+      "population": 63843,
+      "area": 8.3977,
+      "density": 7602.4,
+      "closest_store_id": 1,
+      "distance": 6,
+      "sales": [
+        {
+          "receipt_number": "001-000128112",
+          "sale_date": "2020-04-30",
+          "sub_total": 24,
+          "tax": 0,
+          "total_amount": 24,
+          "store": {
+            "store_id": 1,
+            "street": "3000 Telegraph Ave",
+            "city": "Berkeley",
+            "state": "CA",
+            "zip": "94705",
+            "latitude": 37.8555,
+            "longitude": -122.2604
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 8,
+              "description": "Brocolli Stir Fry",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 4159,
+      "first_name": "Cheryl",
+      "last_name": "Broe",
+      "first_last_name": "Cheryl Broe",
+      "last_first_name": "Broe, Cheryl",
+      "street": "7 Ruskin Alley",
+      "city": "El Sobrante",
+      "state": "CA",
+      "zip": "94803",
+      "population": 26165,
+      "area": 12.2691,
+      "density": 2132.6,
+      "closest_store_id": 1,
+      "distance": 7,
+      "sales": [
+        {
+          "receipt_number": "001-000163141",
+          "sale_date": "2020-06-04",
+          "sub_total": 96,
+          "tax": 0,
+          "total_amount": 96,
+          "store": {
+            "store_id": 1,
+            "street": "3000 Telegraph Ave",
+            "city": "Berkeley",
+            "state": "CA",
+            "zip": "94705",
+            "latitude": 37.8555,
+            "longitude": -122.2604
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 3,
+              "line_total": 36
+            },
+            {
+              "product_id": 3,
+              "description": "Spinach Orzo",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 5,
+              "description": "Chicken Salad",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 7,
+              "description": "Tilapia Piccata",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 8,
+              "description": "Brocolli Stir Fry",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 4198,
+      "first_name": "Andreana",
+      "last_name": "Drew",
+      "first_last_name": "Andreana Drew",
+      "last_first_name": "Drew, Andreana",
+      "street": "11039 Cordelia Alley",
+      "city": "El Sobrante",
+      "state": "CA",
+      "zip": "94803",
+      "population": 26165,
+      "area": 12.2691,
+      "density": 2132.6,
+      "closest_store_id": 1,
+      "distance": 7,
+      "sales": [
+        {
+          "receipt_number": "001-000169216",
+          "sale_date": "2020-06-09",
+          "sub_total": 144,
+          "tax": 0,
+          "total_amount": 144,
+          "store": {
+            "store_id": 1,
+            "street": "3000 Telegraph Ave",
+            "city": "Berkeley",
+            "state": "CA",
+            "zip": "94705",
+            "latitude": 37.8555,
+            "longitude": -122.2604
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 3,
+              "line_total": 36
+            },
+            {
+              "product_id": 3,
+              "description": "Spinach Orzo",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 4,
+              "line_total": 48
+            },
+            {
+              "product_id": 5,
+              "description": "Chicken Salad",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 8,
+              "description": "Brocolli Stir Fry",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 4260,
+      "first_name": "Dom",
+      "last_name": "Risbrough",
+      "first_last_name": "Dom Risbrough",
+      "last_first_name": "Risbrough, Dom",
+      "street": "3 Northland Crossing",
+      "city": "Richmond",
+      "state": "CA",
+      "zip": "94805",
+      "population": 14208,
+      "area": 2.0644,
+      "density": 6882.38,
+      "closest_store_id": 1,
+      "distance": 7,
+      "sales": [
+        {
+          "receipt_number": "001-000248269",
+          "sale_date": "2020-08-22",
+          "sub_total": 60,
+          "tax": 0,
+          "total_amount": 60,
+          "store": {
+            "store_id": 1,
+            "street": "3000 Telegraph Ave",
+            "city": "Berkeley",
+            "state": "CA",
+            "zip": "94705",
+            "latitude": 37.8555,
+            "longitude": -122.2604
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 3,
+              "line_total": 36
+            },
+            {
+              "product_id": 5,
+              "description": "Chicken Salad",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 8,
+              "description": "Brocolli Stir Fry",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 5394,
+      "first_name": "Katharina",
+      "last_name": "Bavester",
+      "first_last_name": "Katharina Bavester",
+      "last_first_name": "Bavester, Katharina",
+      "street": "522 Cordelia Lane",
+      "city": "San Francisco",
+      "state": "CA",
+      "zip": "94102",
+      "population": 31067,
+      "area": 0.6665,
+      "density": 46609.19,
+      "closest_store_id": 1,
+      "distance": 10,
+      "sales": [
+        {
+          "receipt_number": "001-000179181",
+          "sale_date": "2020-06-18",
+          "sub_total": 48,
+          "tax": 0,
+          "total_amount": 48,
+          "store": {
+            "store_id": 1,
+            "street": "3000 Telegraph Ave",
+            "city": "Berkeley",
+            "state": "CA",
+            "zip": "94705",
+            "latitude": 37.8555,
+            "longitude": -122.2604
+          },
+          "line_items": [
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 3,
+              "description": "Spinach Orzo",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 6782,
+      "first_name": "Lyndsay",
+      "last_name": "Iuorio",
+      "first_last_name": "Lyndsay Iuorio",
+      "last_first_name": "Iuorio, Lyndsay",
+      "street": "4 Thackeray Road",
+      "city": "Walnut Creek",
+      "state": "CA",
+      "zip": "94596",
+      "population": 20822,
+      "area": 6.1908,
+      "density": 3363.36,
+      "closest_store_id": 1,
+      "distance": 12,
+      "sales": [
+        {
+          "receipt_number": "001-000250031",
+          "sale_date": "2020-08-23",
+          "sub_total": 24,
+          "tax": 0,
+          "total_amount": 24,
+          "store": {
+            "store_id": 1,
+            "street": "3000 Telegraph Ave",
+            "city": "Berkeley",
+            "state": "CA",
+            "zip": "94705",
+            "latitude": 37.8555,
+            "longitude": -122.2604
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 9046,
+      "first_name": "Beth",
+      "last_name": "Scotchmor",
+      "first_last_name": "Beth Scotchmor",
+      "last_first_name": "Scotchmor, Beth",
+      "street": "6070 Merchant Park",
+      "city": "Seattle",
+      "state": "WA",
+      "zip": "98112",
+      "population": 25426,
+      "area": 3.8124,
+      "density": 6669.22,
+      "closest_store_id": 2,
+      "distance": 2,
+      "sales": [
+        {
+          "receipt_number": "002-000144107",
+          "sale_date": "2020-06-06",
+          "sub_total": 96,
+          "tax": 0,
+          "total_amount": 96,
+          "store": {
+            "store_id": 2,
+            "street": "1001 Broadway",
+            "city": "Seattle",
+            "state": "WA",
+            "zip": "98122",
+            "latitude": 47.6114,
+            "longitude": -122.3214
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 3,
+              "description": "Spinach Orzo",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 7,
+              "description": "Tilapia Piccata",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 9189,
+      "first_name": "Cornell",
+      "last_name": "Brammar",
+      "first_last_name": "Cornell Brammar",
+      "last_first_name": "Brammar, Cornell",
+      "street": "94261 Sunnyside Junction",
+      "city": "Seattle",
+      "state": "WA",
+      "zip": "98112",
+      "population": 25426,
+      "area": 3.8124,
+      "density": 6669.22,
+      "closest_store_id": 2,
+      "distance": 2,
+      "sales": [
+        {
+          "receipt_number": "002-000158290",
+          "sale_date": "2020-06-20",
+          "sub_total": 84,
+          "tax": 0,
+          "total_amount": 84,
+          "store": {
+            "store_id": 2,
+            "street": "1001 Broadway",
+            "city": "Seattle",
+            "state": "WA",
+            "zip": "98122",
+            "latitude": 47.6114,
+            "longitude": -122.3214
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 3,
+              "description": "Spinach Orzo",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 9298,
+      "first_name": "Cecilla",
+      "last_name": "Lewry",
+      "first_last_name": "Cecilla Lewry",
+      "last_first_name": "Lewry, Cecilla",
+      "street": "987 Kim Terrace",
+      "city": "Seattle",
+      "state": "WA",
+      "zip": "98144",
+      "population": 31845,
+      "area": 4.0261,
+      "density": 7909.57,
+      "closest_store_id": 2,
+      "distance": 2,
+      "sales": [
+        {
+          "receipt_number": "002-000115912",
+          "sale_date": "2020-05-04",
+          "sub_total": 48,
+          "tax": 0,
+          "total_amount": 48,
+          "store": {
+            "store_id": 2,
+            "street": "1001 Broadway",
+            "city": "Seattle",
+            "state": "WA",
+            "zip": "98122",
+            "latitude": 47.6114,
+            "longitude": -122.3214
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 9528,
+      "first_name": "Markos",
+      "last_name": "Toderi",
+      "first_last_name": "Markos Toderi",
+      "last_first_name": "Toderi, Markos",
+      "street": "6434 Mallard Way",
+      "city": "Seattle",
+      "state": "WA",
+      "zip": "98119",
+      "population": 25710,
+      "area": 2.9786,
+      "density": 8631.66,
+      "closest_store_id": 2,
+      "distance": 3,
+      "sales": [
+        {
+          "receipt_number": "002-000218323",
+          "sale_date": "2020-08-23",
+          "sub_total": 48,
+          "tax": 0,
+          "total_amount": 48,
+          "store": {
+            "store_id": 2,
+            "street": "1001 Broadway",
+            "city": "Seattle",
+            "state": "WA",
+            "zip": "98122",
+            "latitude": 47.6114,
+            "longitude": -122.3214
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 8,
+              "description": "Brocolli Stir Fry",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 10295,
+      "first_name": "Debby",
+      "last_name": "Leber",
+      "first_last_name": "Debby Leber",
+      "last_first_name": "Leber, Debby",
+      "street": "1660 Bluejay Circle",
+      "city": "Mercer Island",
+      "state": "WA",
+      "zip": "98040",
+      "population": 25492,
+      "area": 7.1681,
+      "density": 3556.31,
+      "closest_store_id": 2,
+      "distance": 5,
+      "sales": [
+        {
+          "receipt_number": "002-000217889",
+          "sale_date": "2020-08-23",
+          "sub_total": 24,
+          "tax": 0,
+          "total_amount": 24,
+          "store": {
+            "store_id": 2,
+            "street": "1001 Broadway",
+            "city": "Seattle",
+            "state": "WA",
+            "zip": "98122",
+            "latitude": 47.6114,
+            "longitude": -122.3214
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 11291,
+      "first_name": "Dasi",
+      "last_name": "Radden",
+      "first_last_name": "Dasi Radden",
+      "last_first_name": "Radden, Dasi",
+      "street": "18 Hoepker Court",
+      "city": "Seattle",
+      "state": "WA",
+      "zip": "98136",
+      "population": 16607,
+      "area": 2.5849,
+      "density": 6424.73,
+      "closest_store_id": 2,
+      "distance": 6,
+      "sales": [
+        {
+          "receipt_number": "002-000109083",
+          "sale_date": "2020-04-27",
+          "sub_total": 132,
+          "tax": 0,
+          "total_amount": 132,
+          "store": {
+            "store_id": 2,
+            "street": "1001 Broadway",
+            "city": "Seattle",
+            "state": "WA",
+            "zip": "98122",
+            "latitude": 47.6114,
+            "longitude": -122.3214
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 3,
+              "line_total": 36
+            },
+            {
+              "product_id": 3,
+              "description": "Spinach Orzo",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 4,
+              "line_total": 48
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 7,
+              "description": "Tilapia Piccata",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 11779,
+      "first_name": "Emlynne",
+      "last_name": "Takle",
+      "first_last_name": "Emlynne Takle",
+      "last_first_name": "Takle, Emlynne",
+      "street": "1 Johnson Park",
+      "city": "Seattle",
+      "state": "WA",
+      "zip": "98125",
+      "population": 42475,
+      "area": 6.1806,
+      "density": 6872.28,
+      "closest_store_id": 2,
+      "distance": 7,
+      "sales": [
+        {
+          "receipt_number": "002-000115446",
+          "sale_date": "2020-05-03",
+          "sub_total": 12,
+          "tax": 0,
+          "total_amount": 12,
+          "store": {
+            "store_id": 2,
+            "street": "1001 Broadway",
+            "city": "Seattle",
+            "state": "WA",
+            "zip": "98122",
+            "latitude": 47.6114,
+            "longitude": -122.3214
+          },
+          "line_items": [
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 12160,
+      "first_name": "Sim",
+      "last_name": "Dorie",
+      "first_last_name": "Sim Dorie",
+      "last_first_name": "Dorie, Sim",
+      "street": "6709 Bayside Hill",
+      "city": "Seattle",
+      "state": "WA",
+      "zip": "98146",
+      "population": 28022,
+      "area": 5.036,
+      "density": 5564.33,
+      "closest_store_id": 2,
+      "distance": 8,
+      "sales": [
+        {
+          "receipt_number": "002-000105004",
+          "sale_date": "2020-04-23",
+          "sub_total": 36,
+          "tax": 0,
+          "total_amount": 36,
+          "store": {
+            "store_id": 2,
+            "street": "1001 Broadway",
+            "city": "Seattle",
+            "state": "WA",
+            "zip": "98122",
+            "latitude": 47.6114,
+            "longitude": -122.3214
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 8,
+              "description": "Brocolli Stir Fry",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 12493,
+      "first_name": "Lula",
+      "last_name": "Stoneman",
+      "first_last_name": "Lula Stoneman",
+      "last_first_name": "Stoneman, Lula",
+      "street": "2 Gateway Center",
+      "city": "Kirkland",
+      "state": "WA",
+      "zip": "98034",
+      "population": 43119,
+      "area": 9.6658,
+      "density": 4461.0,
+      "closest_store_id": 2,
+      "distance": 9,
+      "sales": [
+        {
+          "receipt_number": "002-000203726",
+          "sale_date": "2020-08-08",
+          "sub_total": 132,
+          "tax": 0,
+          "total_amount": 132,
+          "store": {
+            "store_id": 2,
+            "street": "1001 Broadway",
+            "city": "Seattle",
+            "state": "WA",
+            "zip": "98122",
+            "latitude": 47.6114,
+            "longitude": -122.3214
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 3,
+              "line_total": 36
+            },
+            {
+              "product_id": 3,
+              "description": "Spinach Orzo",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 3,
+              "line_total": 36
+            },
+            {
+              "product_id": 7,
+              "description": "Tilapia Piccata",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 14460,
+      "first_name": "Shannon",
+      "last_name": "Morrall",
+      "first_last_name": "Shannon Morrall",
+      "last_first_name": "Morrall, Shannon",
+      "street": "12076 Lotheville Circle",
+      "city": "Port Orchard",
+      "state": "WA",
+      "zip": "98366",
+      "population": 33618,
+      "area": 22.732,
+      "density": 1478.88,
+      "closest_store_id": 2,
+      "distance": 13,
+      "sales": [
+        {
+          "receipt_number": "002-000119996",
+          "sale_date": "2020-05-08",
+          "sub_total": 36,
+          "tax": 0,
+          "total_amount": 36,
+          "store": {
+            "store_id": 2,
+            "street": "1001 Broadway",
+            "city": "Seattle",
+            "state": "WA",
+            "zip": "98122",
+            "latitude": 47.6114,
+            "longitude": -122.3214
+          },
+          "line_items": [
+            {
+              "product_id": 3,
+              "description": "Spinach Orzo",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 5,
+              "description": "Chicken Salad",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 15481,
+      "first_name": "Raquel",
+      "last_name": "Ansill",
+      "first_last_name": "Raquel Ansill",
+      "last_first_name": "Ansill, Raquel",
+      "street": "57 Fordem Circle",
+      "city": "Dallas",
+      "state": "TX",
+      "zip": "75201",
+      "population": 15891,
+      "area": 2.4451,
+      "density": 6499.06,
+      "closest_store_id": 3,
+      "distance": 1,
+      "sales": [
+        {
+          "receipt_number": "003-000131827",
+          "sale_date": "2020-06-11",
+          "sub_total": 108,
+          "tax": 0,
+          "total_amount": 108,
+          "store": {
+            "store_id": 3,
+            "street": "2510 McKinney Ave",
+            "city": "Dallas",
+            "state": "TX",
+            "zip": "75201",
+            "latitude": 32.7958,
+            "longitude": -96.8015
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 3,
+              "line_total": 36
+            },
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 7,
+              "description": "Tilapia Piccata",
+              "price": 12,
+              "quantity": 3,
+              "line_total": 36
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 15710,
+      "first_name": "Ted",
+      "last_name": "Campany",
+      "first_last_name": "Ted Campany",
+      "last_first_name": "Campany, Ted",
+      "street": "91111 West Road",
+      "city": "Dallas",
+      "state": "TX",
+      "zip": "75219",
+      "population": 23419,
+      "area": 2.32,
+      "density": 10094.48,
+      "closest_store_id": 3,
+      "distance": 1,
+      "sales": [
+        {
+          "receipt_number": "003-000183488",
+          "sale_date": "2020-08-13",
+          "sub_total": 12,
+          "tax": 0,
+          "total_amount": 12,
+          "store": {
+            "store_id": 3,
+            "street": "2510 McKinney Ave",
+            "city": "Dallas",
+            "state": "TX",
+            "zip": "75201",
+            "latitude": 32.7958,
+            "longitude": -96.8015
+          },
+          "line_items": [
+            {
+              "product_id": 5,
+              "description": "Chicken Salad",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 15799,
+      "first_name": "Zackariah",
+      "last_name": "McCreath",
+      "first_last_name": "Zackariah McCreath",
+      "last_first_name": "McCreath, Zackariah",
+      "street": "64828 Farwell Terrace",
+      "city": "Dallas",
+      "state": "TX",
+      "zip": "75219",
+      "population": 23419,
+      "area": 2.32,
+      "density": 10094.48,
+      "closest_store_id": 3,
+      "distance": 1,
+      "sales": [
+        {
+          "receipt_number": "003-000164376",
+          "sale_date": "2020-07-22",
+          "sub_total": 108,
+          "tax": 0,
+          "total_amount": 108,
+          "store": {
+            "store_id": 3,
+            "street": "2510 McKinney Ave",
+            "city": "Dallas",
+            "state": "TX",
+            "zip": "75201",
+            "latitude": 32.7958,
+            "longitude": -96.8015
+          },
+          "line_items": [
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 3,
+              "line_total": 36
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 7,
+              "description": "Tilapia Piccata",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 8,
+              "description": "Brocolli Stir Fry",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 16476,
+      "first_name": "Yancey",
+      "last_name": "Lamyman",
+      "first_last_name": "Yancey Lamyman",
+      "last_first_name": "Lamyman, Yancey",
+      "street": "3078 Emmet Junction",
+      "city": "Dallas",
+      "state": "TX",
+      "zip": "75206",
+      "population": 38375,
+      "area": 4.5018,
+      "density": 8524.43,
+      "closest_store_id": 3,
+      "distance": 3,
+      "sales": [
+        {
+          "receipt_number": "003-000134868",
+          "sale_date": "2020-06-14",
+          "sub_total": 48,
+          "tax": 0,
+          "total_amount": 48,
+          "store": {
+            "store_id": 3,
+            "street": "2510 McKinney Ave",
+            "city": "Dallas",
+            "state": "TX",
+            "zip": "75201",
+            "latitude": 32.7958,
+            "longitude": -96.8015
+          },
+          "line_items": [
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 3,
+              "description": "Spinach Orzo",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 16932,
+      "first_name": "Betta",
+      "last_name": "Swatland",
+      "first_last_name": "Betta Swatland",
+      "last_first_name": "Swatland, Betta",
+      "street": "7060 Merchant Pass",
+      "city": "Dallas",
+      "state": "TX",
+      "zip": "75210",
+      "population": 8578,
+      "area": 2.5972,
+      "density": 3302.75,
+      "closest_store_id": 3,
+      "distance": 4,
+      "sales": [
+        {
+          "receipt_number": "003-000177427",
+          "sale_date": "2020-08-06",
+          "sub_total": 24,
+          "tax": 0,
+          "total_amount": 24,
+          "store": {
+            "store_id": 3,
+            "street": "2510 McKinney Ave",
+            "city": "Dallas",
+            "state": "TX",
+            "zip": "75201",
+            "latitude": 32.7958,
+            "longitude": -96.8015
+          },
+          "line_items": [
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 17003,
+      "first_name": "Pryce",
+      "last_name": "Slafford",
+      "first_last_name": "Pryce Slafford",
+      "last_first_name": "Slafford, Pryce",
+      "street": "172 Bunker Hill Drive",
+      "city": "Dallas",
+      "state": "TX",
+      "zip": "75210",
+      "population": 8578,
+      "area": 2.5972,
+      "density": 3302.75,
+      "closest_store_id": 3,
+      "distance": 4,
+      "sales": [
+        {
+          "receipt_number": "003-000099402",
+          "sale_date": "2020-05-01",
+          "sub_total": 36,
+          "tax": 0,
+          "total_amount": 36,
+          "store": {
+            "store_id": 3,
+            "street": "2510 McKinney Ave",
+            "city": "Dallas",
+            "state": "TX",
+            "zip": "75201",
+            "latitude": 32.7958,
+            "longitude": -96.8015
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 17711,
+      "first_name": "Sheffield",
+      "last_name": "Dunkerton",
+      "first_last_name": "Sheffield Dunkerton",
+      "last_first_name": "Dunkerton, Sheffield",
+      "street": "11 Quincy Parkway",
+      "city": "Dallas",
+      "state": "TX",
+      "zip": "75225",
+      "population": 21296,
+      "area": 4.8118,
+      "density": 4425.77,
+      "closest_store_id": 3,
+      "distance": 5,
+      "sales": [
+        {
+          "receipt_number": "003-000154102",
+          "sale_date": "2020-07-10",
+          "sub_total": 24,
+          "tax": 0,
+          "total_amount": 24,
+          "store": {
+            "store_id": 3,
+            "street": "2510 McKinney Ave",
+            "city": "Dallas",
+            "state": "TX",
+            "zip": "75201",
+            "latitude": 32.7958,
+            "longitude": -96.8015
+          },
+          "line_items": [
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 7,
+              "description": "Tilapia Piccata",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 19226,
+      "first_name": "Christin",
+      "last_name": "Penny",
+      "first_last_name": "Christin Penny",
+      "last_first_name": "Penny, Christin",
+      "street": "3452 Muir Hill",
+      "city": "Dallas",
+      "state": "TX",
+      "zip": "75238",
+      "population": 33220,
+      "area": 7.1671,
+      "density": 4635.04,
+      "closest_store_id": 3,
+      "distance": 8,
+      "sales": [
+        {
+          "receipt_number": "003-000186881",
+          "sale_date": "2020-08-16",
+          "sub_total": 144,
+          "tax": 0,
+          "total_amount": 144,
+          "store": {
+            "store_id": 3,
+            "street": "2510 McKinney Ave",
+            "city": "Dallas",
+            "state": "TX",
+            "zip": "75201",
+            "latitude": 32.7958,
+            "longitude": -96.8015
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 4,
+              "line_total": 48
+            },
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 3,
+              "line_total": 36
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 8,
+              "description": "Brocolli Stir Fry",
+              "price": 12,
+              "quantity": 3,
+              "line_total": 36
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 19494,
+      "first_name": "Brianne",
+      "last_name": "Dundendale",
+      "first_last_name": "Brianne Dundendale",
+      "last_first_name": "Dundendale, Brianne",
+      "street": "7 Mcbride Center",
+      "city": "Dallas",
+      "state": "TX",
+      "zip": "75240",
+      "population": 28537,
+      "area": 4.4303,
+      "density": 6441.3,
+      "closest_store_id": 3,
+      "distance": 9,
+      "sales": [
+        {
+          "receipt_number": "003-000131547",
+          "sale_date": "2020-06-10",
+          "sub_total": 84,
+          "tax": 0,
+          "total_amount": 84,
+          "store": {
+            "store_id": 3,
+            "street": "2510 McKinney Ave",
+            "city": "Dallas",
+            "state": "TX",
+            "zip": "75201",
+            "latitude": 32.7958,
+            "longitude": -96.8015
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 3,
+              "line_total": 36
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 7,
+              "description": "Tilapia Piccata",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 19954,
+      "first_name": "Merell",
+      "last_name": "Cruikshanks",
+      "first_last_name": "Merell Cruikshanks",
+      "last_first_name": "Cruikshanks, Merell",
+      "street": "5 Armistice Road",
+      "city": "Mesquite",
+      "state": "TX",
+      "zip": "75150",
+      "population": 62452,
+      "area": 13.574,
+      "density": 4600.86,
+      "closest_store_id": 3,
+      "distance": 10,
+      "sales": [
+        {
+          "receipt_number": "003-000209184",
+          "sale_date": "2020-09-13",
+          "sub_total": 36,
+          "tax": 0,
+          "total_amount": 36,
+          "store": {
+            "store_id": 3,
+            "street": "2510 McKinney Ave",
+            "city": "Dallas",
+            "state": "TX",
+            "zip": "75201",
+            "latitude": 32.7958,
+            "longitude": -96.8015
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 8,
+              "description": "Brocolli Stir Fry",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 22673,
+      "first_name": "Sue",
+      "last_name": "Delepine",
+      "first_last_name": "Sue Delepine",
+      "last_first_name": "Delepine, Sue",
+      "street": "117 Hauk Trail",
+      "city": "Miami",
+      "state": "FL",
+      "zip": "33137",
+      "population": 23965,
+      "area": 2.498,
+      "density": 9593.84,
+      "closest_store_id": 4,
+      "distance": 3,
+      "sales": [
+        {
+          "receipt_number": "004-000143587",
+          "sale_date": "2020-07-14",
+          "sub_total": 60,
+          "tax": 0,
+          "total_amount": 60,
+          "store": {
+            "store_id": 4,
+            "street": "299 SE 3rd Ave",
+            "city": "Miami",
+            "state": "FL",
+            "zip": "33131",
+            "latitude": 25.772,
+            "longitude": -80.1891
+          },
+          "line_items": [
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 7,
+              "description": "Tilapia Piccata",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 8,
+              "description": "Brocolli Stir Fry",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 23017,
+      "first_name": "Darb",
+      "last_name": "Goucher",
+      "first_last_name": "Darb Goucher",
+      "last_first_name": "Goucher, Darb",
+      "street": "654 Glendale Parkway",
+      "city": "Miami",
+      "state": "FL",
+      "zip": "33133",
+      "population": 34460,
+      "area": 4.5117,
+      "density": 7637.88,
+      "closest_store_id": 4,
+      "distance": 4,
+      "sales": [
+        {
+          "receipt_number": "004-000137286",
+          "sale_date": "2020-07-05",
+          "sub_total": 24,
+          "tax": 0,
+          "total_amount": 24,
+          "store": {
+            "store_id": 4,
+            "street": "299 SE 3rd Ave",
+            "city": "Miami",
+            "state": "FL",
+            "zip": "33131",
+            "latitude": 25.772,
+            "longitude": -80.1891
+          },
+          "line_items": [
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 5,
+              "description": "Chicken Salad",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 23319,
+      "first_name": "Brnaba",
+      "last_name": "Challicombe",
+      "first_last_name": "Brnaba Challicombe",
+      "last_first_name": "Challicombe, Brnaba",
+      "street": "22008 Jay Circle",
+      "city": "Miami",
+      "state": "FL",
+      "zip": "33142",
+      "population": 58574,
+      "area": 7.8803,
+      "density": 7433.01,
+      "closest_store_id": 4,
+      "distance": 4,
+      "sales": [
+        {
+          "receipt_number": "004-000177233",
+          "sale_date": "2020-08-26",
+          "sub_total": 60,
+          "tax": 0,
+          "total_amount": 60,
+          "store": {
+            "store_id": 4,
+            "street": "299 SE 3rd Ave",
+            "city": "Miami",
+            "state": "FL",
+            "zip": "33131",
+            "latitude": 25.772,
+            "longitude": -80.1891
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 3,
+              "description": "Spinach Orzo",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 8,
+              "description": "Brocolli Stir Fry",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 23347,
+      "first_name": "Royce",
+      "last_name": "Fielders",
+      "first_last_name": "Royce Fielders",
+      "last_first_name": "Fielders, Royce",
+      "street": "8 Hermina Parkway",
+      "city": "Key Biscayne",
+      "state": "FL",
+      "zip": "33149",
+      "population": 13054,
+      "area": 4.9613,
+      "density": 2631.17,
+      "closest_store_id": 4,
+      "distance": 4,
+      "sales": [
+        {
+          "receipt_number": "004-000138546",
+          "sale_date": "2020-07-08",
+          "sub_total": 96,
+          "tax": 0,
+          "total_amount": 96,
+          "store": {
+            "store_id": 4,
+            "street": "299 SE 3rd Ave",
+            "city": "Miami",
+            "state": "FL",
+            "zip": "33131",
+            "latitude": 25.772,
+            "longitude": -80.1891
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 5,
+              "description": "Chicken Salad",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 7,
+              "description": "Tilapia Piccata",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 8,
+              "description": "Brocolli Stir Fry",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 23902,
+      "first_name": "Joice",
+      "last_name": "Chidgey",
+      "first_last_name": "Joice Chidgey",
+      "last_first_name": "Chidgey, Joice",
+      "street": "7996 Loeprich Alley",
+      "city": "Miami",
+      "state": "FL",
+      "zip": "33138",
+      "population": 29867,
+      "area": 4.5688,
+      "density": 6537.13,
+      "closest_store_id": 4,
+      "distance": 6,
+      "sales": [
+        {
+          "receipt_number": "004-000089887",
+          "sale_date": "2020-04-30",
+          "sub_total": 48,
+          "tax": 0,
+          "total_amount": 48,
+          "store": {
+            "store_id": 4,
+            "street": "299 SE 3rd Ave",
+            "city": "Miami",
+            "state": "FL",
+            "zip": "33131",
+            "latitude": 25.772,
+            "longitude": -80.1891
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 3,
+              "description": "Spinach Orzo",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 8,
+              "description": "Brocolli Stir Fry",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 24014,
+      "first_name": "Michale",
+      "last_name": "Caudle",
+      "first_last_name": "Michale Caudle",
+      "last_first_name": "Caudle, Michale",
+      "street": "322 Washington Parkway",
+      "city": "Miami Beach",
+      "state": "FL",
+      "zip": "33141",
+      "population": 40005,
+      "area": 2.6363,
+      "density": 15174.75,
+      "closest_store_id": 4,
+      "distance": 6,
+      "sales": [
+        {
+          "receipt_number": "004-000177033",
+          "sale_date": "2020-08-25",
+          "sub_total": 48,
+          "tax": 0,
+          "total_amount": 48,
+          "store": {
+            "store_id": 4,
+            "street": "299 SE 3rd Ave",
+            "city": "Miami",
+            "state": "FL",
+            "zip": "33131",
+            "latitude": 25.772,
+            "longitude": -80.1891
+          },
+          "line_items": [
+            {
+              "product_id": 3,
+              "description": "Spinach Orzo",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 7,
+              "description": "Tilapia Piccata",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 25267,
+      "first_name": "Tobin",
+      "last_name": "Pude",
+      "first_last_name": "Tobin Pude",
+      "last_first_name": "Pude, Tobin",
+      "street": "70078 Porter Court",
+      "city": "Miami",
+      "state": "FL",
+      "zip": "33166",
+      "population": 24830,
+      "area": 10.1299,
+      "density": 2451.17,
+      "closest_store_id": 4,
+      "distance": 9,
+      "sales": [
+        {
+          "receipt_number": "004-000111979",
+          "sale_date": "2020-05-31",
+          "sub_total": 108,
+          "tax": 0,
+          "total_amount": 108,
+          "store": {
+            "store_id": 4,
+            "street": "299 SE 3rd Ave",
+            "city": "Miami",
+            "state": "FL",
+            "zip": "33131",
+            "latitude": 25.772,
+            "longitude": -80.1891
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 8,
+              "description": "Brocolli Stir Fry",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 25339,
+      "first_name": "Lucilia",
+      "last_name": "Logg",
+      "first_last_name": "Lucilia Logg",
+      "last_first_name": "Logg, Lucilia",
+      "street": "62940 Towne Terrace",
+      "city": "Miami",
+      "state": "FL",
+      "zip": "33166",
+      "population": 24830,
+      "area": 10.1299,
+      "density": 2451.17,
+      "closest_store_id": 4,
+      "distance": 9,
+      "sales": [
+        {
+          "receipt_number": "004-000115633",
+          "sale_date": "2020-06-05",
+          "sub_total": 120,
+          "tax": 0,
+          "total_amount": 120,
+          "store": {
+            "store_id": 4,
+            "street": "299 SE 3rd Ave",
+            "city": "Miami",
+            "state": "FL",
+            "zip": "33131",
+            "latitude": 25.772,
+            "longitude": -80.1891
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 3,
+              "description": "Spinach Orzo",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 4,
+              "line_total": 48
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 26882,
+      "first_name": "Billy",
+      "last_name": "Cattini",
+      "first_last_name": "Billy Cattini",
+      "last_first_name": "Cattini, Billy",
+      "street": "6858 Burning Wood Avenue",
+      "city": "Miami",
+      "state": "FL",
+      "zip": "33175",
+      "population": 55334,
+      "area": 7.9957,
+      "density": 6920.45,
+      "closest_store_id": 4,
+      "distance": 14,
+      "sales": [
+        {
+          "receipt_number": "004-000183530",
+          "sale_date": "2020-09-02",
+          "sub_total": 144,
+          "tax": 0,
+          "total_amount": 144,
+          "store": {
+            "store_id": 4,
+            "street": "299 SE 3rd Ave",
+            "city": "Miami",
+            "state": "FL",
+            "zip": "33131",
+            "latitude": 25.772,
+            "longitude": -80.1891
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 3,
+              "description": "Spinach Orzo",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 3,
+              "line_total": 36
+            },
+            {
+              "product_id": 7,
+              "description": "Tilapia Piccata",
+              "price": 12,
+              "quantity": 3,
+              "line_total": 36
+            },
+            {
+              "product_id": 8,
+              "description": "Brocolli Stir Fry",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 27380,
+      "first_name": "Juliette",
+      "last_name": "Simoncello",
+      "first_last_name": "Juliette Simoncello",
+      "last_first_name": "Simoncello, Juliette",
+      "street": "485 Hazelcrest Alley",
+      "city": "Fort Lauderdale",
+      "state": "FL",
+      "zip": "33312",
+      "population": 53552,
+      "area": 12.0563,
+      "density": 4441.83,
+      "closest_store_id": 4,
+      "distance": 22,
+      "sales": [
+        {
+          "receipt_number": "004-000192337",
+          "sale_date": "2020-09-16",
+          "sub_total": 96,
+          "tax": 0,
+          "total_amount": 96,
+          "store": {
+            "store_id": 4,
+            "street": "299 SE 3rd Ave",
+            "city": "Miami",
+            "state": "FL",
+            "zip": "33131",
+            "latitude": 25.772,
+            "longitude": -80.1891
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 4,
+              "line_total": 48
+            },
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 5,
+              "description": "Chicken Salad",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 27654,
+      "first_name": "Nestor",
+      "last_name": "Winfred",
+      "first_last_name": "Nestor Winfred",
+      "last_first_name": "Winfred, Nestor",
+      "street": "593 American Ash Hill",
+      "city": "Nashville",
+      "state": "TN",
+      "zip": "37208",
+      "population": 17582,
+      "area": 5.0517,
+      "density": 3480.43,
+      "closest_store_id": 5,
+      "distance": 2,
+      "sales": [
+        {
+          "receipt_number": "005-000147541",
+          "sale_date": "2020-08-27",
+          "sub_total": 96,
+          "tax": 0,
+          "total_amount": 96,
+          "store": {
+            "store_id": 5,
+            "street": "1202 Broadway",
+            "city": "Nashville",
+            "state": "TN",
+            "zip": "37203",
+            "latitude": 36.1568,
+            "longitude": -86.7881
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 3,
+              "line_total": 36
+            },
+            {
+              "product_id": 3,
+              "description": "Spinach Orzo",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 7,
+              "description": "Tilapia Piccata",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 27728,
+      "first_name": "Gus",
+      "last_name": "Haliburton",
+      "first_last_name": "Gus Haliburton",
+      "last_first_name": "Haliburton, Gus",
+      "street": "11 Sommers Crossing",
+      "city": "Nashville",
+      "state": "TN",
+      "zip": "37208",
+      "population": 17582,
+      "area": 5.0517,
+      "density": 3480.43,
+      "closest_store_id": 5,
+      "distance": 2,
+      "sales": [
+        {
+          "receipt_number": "005-000136735",
+          "sale_date": "2020-08-10",
+          "sub_total": 96,
+          "tax": 0,
+          "total_amount": 96,
+          "store": {
+            "store_id": 5,
+            "street": "1202 Broadway",
+            "city": "Nashville",
+            "state": "TN",
+            "zip": "37203",
+            "latitude": 36.1568,
+            "longitude": -86.7881
+          },
+          "line_items": [
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 3,
+              "line_total": 36
+            },
+            {
+              "product_id": 3,
+              "description": "Spinach Orzo",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 7,
+              "description": "Tilapia Piccata",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 27926,
+      "first_name": "Kerrin",
+      "last_name": "Bridel",
+      "first_last_name": "Kerrin Bridel",
+      "last_first_name": "Bridel, Kerrin",
+      "street": "4582 Roth Street",
+      "city": "Nashville",
+      "state": "TN",
+      "zip": "37212",
+      "population": 21031,
+      "area": 2.8952,
+      "density": 7264.14,
+      "closest_store_id": 5,
+      "distance": 2,
+      "sales": [
+        {
+          "receipt_number": "005-000088989",
+          "sale_date": "2020-05-25",
+          "sub_total": 24,
+          "tax": 0,
+          "total_amount": 24,
+          "store": {
+            "store_id": 5,
+            "street": "1202 Broadway",
+            "city": "Nashville",
+            "state": "TN",
+            "zip": "37203",
+            "latitude": 36.1568,
+            "longitude": -86.7881
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 27997,
+      "first_name": "Meagan",
+      "last_name": "Gussin",
+      "first_last_name": "Meagan Gussin",
+      "last_first_name": "Gussin, Meagan",
+      "street": "73526 2nd Terrace",
+      "city": "Nashville",
+      "state": "TN",
+      "zip": "37212",
+      "population": 21031,
+      "area": 2.8952,
+      "density": 7264.14,
+      "closest_store_id": 5,
+      "distance": 2,
+      "sales": [
+        {
+          "receipt_number": "005-000157919",
+          "sale_date": "2020-09-14",
+          "sub_total": 48,
+          "tax": 0,
+          "total_amount": 48,
+          "store": {
+            "store_id": 5,
+            "street": "1202 Broadway",
+            "city": "Nashville",
+            "state": "TN",
+            "zip": "37203",
+            "latitude": 36.1568,
+            "longitude": -86.7881
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 7,
+              "description": "Tilapia Piccata",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 28267,
+      "first_name": "Frederica",
+      "last_name": "Cabrer",
+      "first_last_name": "Frederica Cabrer",
+      "last_first_name": "Cabrer, Frederica",
+      "street": "99 Rutledge Trail",
+      "city": "Nashville",
+      "state": "TN",
+      "zip": "37204",
+      "population": 14768,
+      "area": 9.0824,
+      "density": 1626.0,
+      "closest_store_id": 5,
+      "distance": 4,
+      "sales": [
+        {
+          "receipt_number": "005-000109305",
+          "sale_date": "2020-06-27",
+          "sub_total": 120,
+          "tax": 0,
+          "total_amount": 120,
+          "store": {
+            "store_id": 5,
+            "street": "1202 Broadway",
+            "city": "Nashville",
+            "state": "TN",
+            "zip": "37203",
+            "latitude": 36.1568,
+            "longitude": -86.7881
+          },
+          "line_items": [
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 7,
+              "description": "Tilapia Piccata",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            },
+            {
+              "product_id": 8,
+              "description": "Brocolli Stir Fry",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 28750,
+      "first_name": "Jareb",
+      "last_name": "Girt",
+      "first_last_name": "Jareb Girt",
+      "last_first_name": "Girt, Jareb",
+      "street": "316 Saint Paul Point",
+      "city": "Nashville",
+      "state": "TN",
+      "zip": "37207",
+      "population": 38583,
+      "area": 21.0142,
+      "density": 1836.04,
+      "closest_store_id": 5,
+      "distance": 5,
+      "sales": [
+        {
+          "receipt_number": "005-000126722",
+          "sale_date": "2020-07-26",
+          "sub_total": 36,
+          "tax": 0,
+          "total_amount": 36,
+          "store": {
+            "store_id": 5,
+            "street": "1202 Broadway",
+            "city": "Nashville",
+            "state": "TN",
+            "zip": "37203",
+            "latitude": 36.1568,
+            "longitude": -86.7881
+          },
+          "line_items": [
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 2,
+              "line_total": 24
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 29285,
+      "first_name": "Ezmeralda",
+      "last_name": "McCreadie",
+      "first_last_name": "Ezmeralda McCreadie",
+      "last_first_name": "McCreadie, Ezmeralda",
+      "street": "30 Gulseth Terrace",
+      "city": "Nashville",
+      "state": "TN",
+      "zip": "37215",
+      "population": 22414,
+      "area": 16.5186,
+      "density": 1356.9,
+      "closest_store_id": 5,
+      "distance": 6,
+      "sales": [
+        {
+          "receipt_number": "005-000104373",
+          "sale_date": "2020-06-18",
+          "sub_total": 48,
+          "tax": 0,
+          "total_amount": 48,
+          "store": {
+            "store_id": 5,
+            "street": "1202 Broadway",
+            "city": "Nashville",
+            "state": "TN",
+            "zip": "37203",
+            "latitude": 36.1568,
+            "longitude": -86.7881
+          },
+          "line_items": [
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 3,
+              "line_total": 36
+            },
+            {
+              "product_id": 7,
+              "description": "Tilapia Piccata",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 29783,
+      "first_name": "Nobie",
+      "last_name": "Nuemann",
+      "first_last_name": "Nobie Nuemann",
+      "last_first_name": "Nuemann, Nobie",
+      "street": "955 Beilfuss Place",
+      "city": "Madison",
+      "state": "TN",
+      "zip": "37115",
+      "population": 40484,
+      "area": 23.0954,
+      "density": 1752.9,
+      "closest_store_id": 5,
+      "distance": 8,
+      "sales": [
+        {
+          "receipt_number": "005-000105691",
+          "sale_date": "2020-06-20",
+          "sub_total": 24,
+          "tax": 0,
+          "total_amount": 24,
+          "store": {
+            "store_id": 5,
+            "street": "1202 Broadway",
+            "city": "Nashville",
+            "state": "TN",
+            "zip": "37203",
+            "latitude": 36.1568,
+            "longitude": -86.7881
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 29922,
+      "first_name": "Garwin",
+      "last_name": "Aleksankin",
+      "first_last_name": "Garwin Aleksankin",
+      "last_first_name": "Aleksankin, Garwin",
+      "street": "7 Delaware Place",
+      "city": "Madison",
+      "state": "TN",
+      "zip": "37115",
+      "population": 40484,
+      "area": 23.0954,
+      "density": 1752.9,
+      "closest_store_id": 5,
+      "distance": 8,
+      "sales": [
+        {
+          "receipt_number": "005-000107715",
+          "sale_date": "2020-06-24",
+          "sub_total": 36,
+          "tax": 0,
+          "total_amount": 36,
+          "store": {
+            "store_id": 5,
+            "street": "1202 Broadway",
+            "city": "Nashville",
+            "state": "TN",
+            "zip": "37203",
+            "latitude": 36.1568,
+            "longitude": -86.7881
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 2,
+              "description": "Teriyaki Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "customer_id": 30184,
+      "first_name": "Mindy",
+      "last_name": "Bockh",
+      "first_last_name": "Mindy Bockh",
+      "last_first_name": "Bockh, Mindy",
+      "street": "50432 Sachs Road",
+      "city": "Brentwood",
+      "state": "TN",
+      "zip": "37027",
+      "population": 55130,
+      "area": 61.7696,
+      "density": 892.51,
+      "closest_store_id": 5,
+      "distance": 11,
+      "sales": [
+        {
+          "receipt_number": "005-000136553",
+          "sale_date": "2020-08-09",
+          "sub_total": 36,
+          "tax": 0,
+          "total_amount": 36,
+          "store": {
+            "store_id": 5,
+            "street": "1202 Broadway",
+            "city": "Nashville",
+            "state": "TN",
+            "zip": "37203",
+            "latitude": 36.1568,
+            "longitude": -86.7881
+          },
+          "line_items": [
+            {
+              "product_id": 1,
+              "description": "Pistachio Salmon",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 4,
+              "description": "Eggplant Lasagna",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            },
+            {
+              "product_id": 6,
+              "description": "Curry Chicken",
+              "price": 12,
+              "quantity": 1,
+              "line_total": 12
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
