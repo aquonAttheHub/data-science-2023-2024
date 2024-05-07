@@ -1,0 +1,315 @@
+---
+title : 'W271 Assignment 3'
+output: 
+  pdf_document:
+    toc: true
+    number_sections: true
+---
+
+```{r load packages, message=FALSE}
+library(tidyverse)
+library(stargazer)
+library(package=car)
+```
+
+**Instructions**
+
+Here are some resources that may come in handy as you work on this assignment:
+
+- Access the most updated version of the assignment on the course's [GitHub organization](http://github.com/mids-w271).
+- Complete your assignments using [iSchool DataHub](http://ischool.datahub.berkeley.edu/).
+- Submit your assignment to [Gradescope](https://www.gradescope.com/).
+
+
+# Customer churn study: **Part-3** (100 Points)
+
+In the last two homework assignments, you initiated modeling a binary variable and used logistic regression to study the churn tendencies of customers.
+
+Now, in Part-3, we're going to explore different interactions, transformations, and categorical explanatory variables to create a more comprehensive model.
+
+```{r load of the data, echo=TRUE}
+telcom_churn <- read.csv("./data/Telco_Customer_Churn.csv", header=T,na.strings=c("","NA"))
+head(telcom_churn)
+```
+
+
+For the remainder of this section, pay particular attention to all variables. 
+
+## Data Preprocessing (5 Points)
+
+In this section, Convert variables as needed, and manage any missing values.
+
+```{r echo=TRUE}
+
+dim(telcom_churn)
+```
+```{r echo=TRUE}
+str(telcom_churn)
+```
+```{r echo=TRUE}
+table(is.na(telcom_churn))
+
+```
+```{r echo=TRUE}
+colSums(is.na(telcom_churn))
+
+```
+There are 11 NA values in TotalCharges and no NA values in any other column. Since only a small amount of NA values are missing compaed to the total number of records, we can drop the rows with NA values.
+
+
+```{r echo=TRUE}
+telcom_churn <- na.omit(telcom_churn)
+dim(telcom_churn)
+colSums(is.na(telcom_churn))
+```
+
+
+The next step is to convert the categorical features to factors.
+
+```{r echo=TRUE}
+telcom_churn$SeniorCitizen <- factor(telcom_churn$SeniorCitizen, c(0,1), 
+                                     labels=c('No', 'Yes'), ordered = is.ordered(telcom_churn))
+telcom_churn$Churn <- factor(telcom_churn$Churn)
+telcom_churn$gender <- factor(telcom_churn$gender)
+str(telcom_churn)
+```
+
+```{r echo=TRUE}
+head(telcom_churn)
+```
+```{r echo=TRUE}
+summary(telcom_churn)
+```
+
+
+## Estimate a logistic regression (10 Points)
+
+Estimate the following binary logistic regressions and report the results in a table using stargazer package.
+
+$$
+  \begin{aligned}
+    Churn = \beta_{0} & + \beta_{1} tenure + \beta_{2} MonthlyCharges +\beta_{3} TotalCharges + \beta_{4} SeniorCitizen +\beta_{5} gender +  e \quad \text{(Model 1)} \\ 
+    Churn = \beta_{0} & + \beta_{1} tenure + \beta_{2} MonthlyCharges +\beta_{3} TotalCharges + \beta_{4} SeniorCitizen +\beta_{5} gender \quad \quad \quad\text{(Model 2)} \\       & + \beta_{6} tenure^2 + \beta_{7} MonthlyCharges^2 + \beta_{8} TotalCharges^2 + e\\
+    Churn = \beta_{0} &+ \beta_{1} tenure + \beta_{2} MonthlyCharges +\beta_{3} TotalCharges + \beta_{4} SeniorCitizen +\beta_{5} gender \quad  \quad \quad \text{(Model 3)} \\ 
+      & +  \beta_{6} tenure^2 + \beta_{7} MonthlyCharges^2 + \beta_{8} TotalCharges^2 \\ 
+      & + {\beta}_9 SeniorCitizen \times tenure + {\beta}_{10} SeniorCitizen \times MonthlyCharges \\ 
+      & + \beta_{11} SeniorCitizen \times TotalCharges+ {\beta}_{12} gender \times tenure \\
+      & + {\beta}_{13} gender \times MonthlyCharges + \beta_{14} gender \times TotalCharges      + e
+  \end{aligned}
+$$
+- where  $SeniorCitizen \times MonthlyCharges$ denotes the interaction between `SeniorCitizen` and `MonthlyCharges` variables.
+
+```{r echo=TRUE}
+mod1 <- glm(formula = Churn ~ tenure + MonthlyCharges + TotalCharges + SeniorCitizen + 
+              gender, family=binomial(link=logit), data=telcom_churn)
+
+mod2 <- glm(formula = Churn ~ tenure + MonthlyCharges + TotalCharges + SeniorCitizen + 
+              gender + I(tenure^2) + I(MonthlyCharges^2) + I(TotalCharges^2), 
+            family=binomial(link=logit), data=telcom_churn)
+
+mod3 <- glm(formula = Churn ~ tenure + MonthlyCharges + TotalCharges + SeniorCitizen + 
+              gender + I(tenure^2) + I(MonthlyCharges^2) + I(TotalCharges^2) + 
+              SeniorCitizen:tenure + SeniorCitizen:MonthlyCharges + 
+              SeniorCitizen:TotalCharges + gender:tenure + gender:MonthlyCharges + 
+              gender:TotalCharges, family=binomial(link=logit), data=telcom_churn)
+
+
+stargazer(mod1, mod2, mod3, type="text", omit.stat="f", 
+          star.cutoffs=c(0.05, 0.01, 0.001), 
+          title="Table of Estimated Relationships between Variables and Log Odds of Churn")
+
+```
+
+
+## Test a hypothesis: linear effects (15 Points)
+
+Using `Model 1`, test the hypothesis of linear effects of variables on customer churn using a likelihood ratio test.
+
+```{r echo=TRUE}
+
+
+mod1 <- glm(formula = Churn ~ tenure + MonthlyCharges + TotalCharges + SeniorCitizen + 
+              gender, family=binomial(link=logit), data=telcom_churn)
+
+Anova(mod1, test="LR")
+```
+Using the Anova function from the car package, the Likelihood Ratio Test indicates that the p-values for the effect of tenure, MonthlyCharges, and SeniorCitizen are highly statistically significant, meaning that these variables are important given that the other variables are in the model. Additionally, the effect of TotalCharges on customer churn has a p-value of 0.01414, which is less than a cutoff value of 0.05. Hence, there is evidence that TotalCharges is important, given that the other variables are in the model. We notice that the effect of gender on customer churn has a p-value of 0.94700, which means that we do not have strong evidence that gender is important, given that the other variables are in the model.
+
+
+
+## Test a hypothesis: Non linear effect (15 Points)
+
+Perform a likelihood ratio test to assess the hypothesis that $\beta_6 = 0$, $\beta_7 = 0$, and $\beta_8 = 0$ within the context of `Model 2`. Interpret the implications of this test result in the context of the estimated `Model 2`.
+
+Then, test the same hypothesis in `Model 3` using a likelihood ratio test. Interpret what this test result means in the context of a model like what you have estimated in ` Model 3`. 
+
+```{r echo=TRUE}
+mod2_H0 <- glm(formula = Churn ~ tenure + MonthlyCharges + TotalCharges + SeniorCitizen + 
+                 gender, family=binomial(link=logit), data=telcom_churn)
+mod2_Ha <- glm(formula = Churn ~ tenure + MonthlyCharges + TotalCharges + SeniorCitizen + 
+                 gender + I(tenure^2) + I(MonthlyCharges^2) + I(TotalCharges^2), 
+               family=binomial(link=logit), data=telcom_churn)
+
+anova(mod2_H0, mod2_Ha, test = "Chisq")
+
+```
+Using anova, we performed an LRT to assess the null hypothesis that $\beta_6 = \beta_7 = \beta_8 = 0$ and the alternate hypothesis that at least one of the betas is not 0. From the results above, the p-value is 8.232e-08 using a Chi-Squared approximation. Since this result is highly statistically significant underneath a p-value cutoff of 0.001, we reject the null hypothesis. Therefore, there is strong evidence that at least one of the quadratic transformations of tenure, MonthyCharges, and TotalCharges are important, given that tenure, MonthyCharges, TotalCharges, SeniorCitizen, and gender are in the model.
+
+
+```{r echo=TRUE}
+mod3_H0 <- glm(formula = Churn ~ tenure + MonthlyCharges + TotalCharges + SeniorCitizen + 
+                 gender + SeniorCitizen:tenure + SeniorCitizen:MonthlyCharges + 
+                 SeniorCitizen:TotalCharges + gender:tenure + gender:MonthlyCharges + 
+                 gender:TotalCharges, family=binomial(link=logit), data=telcom_churn)
+
+mod3_Ha <- glm(formula = Churn ~ tenure + MonthlyCharges + TotalCharges + SeniorCitizen + 
+                 gender + I(tenure^2) + I(MonthlyCharges^2) + I(TotalCharges^2) + 
+                 SeniorCitizen:tenure + SeniorCitizen:MonthlyCharges + 
+                 SeniorCitizen:TotalCharges + gender:tenure + gender:MonthlyCharges + 
+                 gender:TotalCharges, family=binomial(link=logit), data=telcom_churn)
+
+anova(mod3_H0, mod3_Ha, test = "Chisq")
+
+```
+Using anova, we performed an LRT to assess the null hypothesis that $\beta_6 = \beta_7 = \beta_8 = 0$ and the alternate hypothesis that at least one of the betas is not 0. From the results above, the p-value is 4.958e-07 using a Chi-Squared approximation. Since this result is highly statistically significant underneath a p-value cutoff of 0.001, we reject the null hypothesis. Therefore, there is strong evidence that at least one of the quadratic transformations of tenure, MonthyCharges, and TotalCharges are important, given that tenure, MonthyCharges, TotalCharges, SeniorCitizen, and gender are in the model. The result also assumes that there is an interaction between SeniorCitizen and tenure, SeniorCitizen and MonthlyCharges, SeniorCitizen and TotalCharges, gender and tenure, gender and MonthlyCharges, as well as gender and TotalCharges.
+
+
+## Test a hypothesis: Total effect of gender (15 Points)
+Test the hypothesis that `gender` has no effect on the likelihood of churn, in  `Model 3`, using a likelihood ratio test. 
+
+```{r echo=TRUE}
+mod3_H0 <- glm(formula = Churn ~ tenure + MonthlyCharges + TotalCharges + 
+                 SeniorCitizen + I(tenure^2) + I(MonthlyCharges^2) + 
+                 I(TotalCharges^2) + SeniorCitizen:tenure + SeniorCitizen:MonthlyCharges + 
+                 SeniorCitizen:TotalCharges, family=binomial(link=logit), data=telcom_churn)
+
+mod3_Ha <- glm(formula = Churn ~ tenure + MonthlyCharges + TotalCharges + SeniorCitizen + 
+                 gender + I(tenure^2) + I(MonthlyCharges^2) + I(TotalCharges^2) + 
+                 SeniorCitizen:tenure + SeniorCitizen:MonthlyCharges + 
+                 SeniorCitizen:TotalCharges + gender:tenure + gender:MonthlyCharges + 
+                 gender:TotalCharges, family=binomial(link=logit), data=telcom_churn)
+
+
+anova(mod3_H0, mod3_Ha, test = "Chisq")
+```
+Using the anova function to perform the LRT, we assess null hypothesis that the coefficients of gender and its interaction terms are all 0, as well as the alternative hypothesis that at least one of the coefficients of gender and its interaction terms are non-zero. From the results, we obtain a deviance value of 9.5332 and a p-value of 0.04907. Since the p-value is slightly less than the 0.05 significance level, we reject the null hypothesis that the coefficients of gender and its interaction terms are all 0. Hence, we have marginal evidence that gender has an effect on churn.
+
+
+
+## Senior V.S. non-senior customers (20 Points)
+
+Estimate a new model, `Model 4`, by excluding all insignificant variables from `Model 3`. Then, predict how the likelihood of churn changes for senior customers compared to non-senior customers, while keeping `tenure,` `MonthlyCharges,` and `TotalCharges` at their average values. 
+
+```{r echo=TRUE}
+Anova(mod3, test="LR")
+```
+From the Anova function above, we see that only the variables tenure, MonthlyCharges, TotalCharges, SeniorCitizen, tenure squared, TotalCharges squared, and the interaction variable between MonthlyCharges and SeniorCitizen are significant.
+
+```{r include=FALSE}
+mod4 <- glm(formula = Churn ~ tenure + MonthlyCharges + TotalCharges + SeniorCitizen + 
+              I(tenure^2) + I(TotalCharges^2) + MonthlyCharges:SeniorCitizen, 
+            family=binomial(link=logit), data=telcom_churn)
+
+```
+
+```{r echo=TRUE}
+mod4$coefficients
+```
+```{r echo=TRUE}
+beta0 <- mod4$coefficients[1]
+beta0
+beta1 <- mod4$coefficients[2]
+beta1
+beta2 <- mod4$coefficients[3]
+beta2
+beta3 <- mod4$coefficients[4]
+beta3
+beta4 <- mod4$coefficients[5]
+beta4
+beta5 <- mod4$coefficients[6]
+beta5
+beta6 <- mod4$coefficients[7]
+beta6
+beta7 <- mod4$coefficients[8]
+beta7
+```
+
+With the coefficients identified from model 4, we want to assess the change in the likelihood of churn for senior customers compared to non-senior customers. This can be accomplished with odds ratios.
+
+```{r echo=TRUE}
+avgMonthyCharges <- mean(telcom_churn$MonthlyCharges)
+avgMonthyCharges
+OR <- exp(beta0 + beta4 + beta7 * avgMonthyCharges) / exp(beta0)
+OR
+```
+```{r echo=TRUE}
+exp(beta4 + beta7 * avgMonthyCharges)
+```
+The result shows us that the estimated odds of churning are about 2.24 times as large for senior customers than for non-senior customers when we hold tenure, MonthlyCharges, and TotalCharges at their average values.
+
+```{r echo=TRUE}
+1 / exp(beta4 + beta7 * avgMonthyCharges)
+```
+Alternatively, the estimated odds of churning are 0.4468137 times as large for non-seniors than for senior customers when we hold tenure, MonthlyCharges, and TotalCharges at their average values.
+
+
+## Construct a confidence interval (20 Points)
+Use `Model 4` and construct the 95% wald confidence interval for the churn probability for the customers with the following profile: 
+
+- $tenure  = 55.00$; 
+- $MonthlyCharges  =  89.86$; 
+- $TotalCharges = 3794.7$;
+- $SeniorCitizen = "No"$;
+
+and
+
+- $tenure  = 29.00$; 
+- $MonthlyCharges  = 18.25$;
+- $TotalCharges = 401.4$;
+- $SeniorCitizen = "Yes"$
+
+
+```{r echo=TRUE}
+predict_data_1 <- data.frame(tenure=55, MonthlyCharges=89.86, 
+                             TotalCharges=3794.7, SeniorCitizen="No")
+predict_data_2 <- data.frame(tenure=29.00, MonthlyCharges=18.25, 
+                             TotalCharges=401.4, SeniorCitizen="Yes")
+
+logit_pred_1 <- predict(mod4, newdata=predict_data_1, type="link", se.fit=TRUE)
+logit_pred_2 <- predict(mod4, newdata=predict_data_2, type="link", se.fit=TRUE)
+
+logit_mod_1 <- logit_pred_1$fit
+logit_mod_2  <- logit_pred_2$fit
+
+logit_se_1 <- logit_pred_1$se.fit
+logit_se_2 <- logit_pred_2$se.fit
+
+ci_logit_lower_1 <- logit_mod_1 - 1.96 * logit_se_1
+ci_logit_upper_1 <- logit_mod_1 + 1.96 * logit_se_1
+
+ci_logit_lower_2 <- logit_mod_2 - 1.96 * logit_se_2
+ci_logit_upper_2 <- logit_mod_2 + 1.96 * logit_se_2
+
+ci_prob_lower_1 <- exp(ci_logit_lower_1) / (1 + exp(ci_logit_lower_1))
+ci_prob_upper_1 <- exp(ci_logit_upper_1) / (1 + exp(ci_logit_upper_1))
+
+ci_prob_lower_2 <- exp(ci_logit_lower_2) / (1 + exp(ci_logit_lower_2))
+ci_prob_upper_2 <- exp(ci_logit_upper_2) / (1 + exp(ci_logit_upper_2))
+
+```
+```{r}
+c(ci_prob_lower_1, ci_prob_upper_1)
+```
+The 95% Wald CI for the probability of Churn for profile 1 is 0.1056106 and 0.1462704.
+
+
+```{r}
+c(ci_prob_lower_2, ci_prob_upper_2)
+```
+
+The 95% Wald CI for the probability of Churn for profile 2 is 0.0562602 and 0.1393393.
+
+
+
+
+
