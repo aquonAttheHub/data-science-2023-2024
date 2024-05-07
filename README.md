@@ -14,3 +14,6 @@ Coursework Completed:
 * Statistics for Data Science
 * Data Engineering
 * Research Design and Applications for Data and Analysis
+* Applied Machine Learning
+* Machine Learning Systems Engineering
+* Statistical Methods for Discrete Response, Time Series, and Panel Data
