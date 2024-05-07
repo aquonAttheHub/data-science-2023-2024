@@ -1,0 +1,218 @@
+---
+title: "Lab 1, Short Question"
+geometry: margin=1in
+output:
+  pdf_document:
+    toc: yes
+    number_sections: yes
+fontsize: 11pt
+---
+
+```{r load packages , message=FALSE, warning=FALSE, include=FALSE}
+library(tidyverse)
+library(stargazer)
+library(nnet)
+library(car)
+library(MASS)
+library(VGAM)
+theme_set(theme_bw()) # set the theme (theme_set is built inside ggplot2)
+```
+
+# Political ideology (30 points)
+
+These questions are based on Question 14 of Chapter 3 of the textbook "Analysis of Categorical Data with R" by Bilder and Loughin.
+
+> An example from Section 4.2.5 examines data from the 1991 U.S. General Social Survey that cross-classifies people according to
+
+> - Political ideology: Very liberal (VL), Slightly liberal (SL),Moderate (M), Slightly conservative (SC), and Very conservative (VC)
+> - Political party: Democrat (D) or Republican (R)
+> - Gender: Female (F) or Male (M).
+
+> Consider political ideology to be a response variable, and political party and gender to be explanatory variables. The data are available in the file pol_ideol_data.csv.
+
+## Recode Data (2 points)
+
+Use the factor() function with the ideology variable to ensure that R places the levels of the ideology variable in the correct order.
+```{r include=FALSE}
+# Import dataset
+pol_ideol_data_unfactored <- read.csv("data/pol_ideol_data.csv", 
+                                      header=T, na.strings=c("","NA"))
+pol_ideol_data <- read.csv("data/pol_ideol_data.csv", header=T, na.strings=c("","NA"))
+head(pol_ideol_data_unfactored)
+str(pol_ideol_data_unfactored)
+```
+
+
+```{r recode data}
+pol_ideol_data$ideol <- factor(pol_ideol_data_unfactored$ideol, 
+                               levels = c("VL", "SL", "M", "SC", "VC"), 
+                               ordered=T)
+pol_ideol_data$gender <- factor(pol_ideol_data_unfactored$gender, 
+                                levels= c("F", "M"), ordered= F)
+pol_ideol_data$party <- factor(pol_ideol_data_unfactored$party, 
+                               levels= c("D", "R"), ordered= F)
+pol_ideol_data$count <- pol_ideol_data_unfactored$count
+```
+
+## Test for Independence (5 points)
+
+Analyze the relationships between political ideology and political party and gender using basic visualizations. Afterward, generate a contingency table and assess the independence of political ideology from political party and gender.
+
+```{r Create a bar plot using the count variable}
+ggplot(pol_ideol_data, aes(x = ideol, y = count, fill = gender)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_grid(~ party) +
+  labs(x = "Political Ideology", y = "Count", fill = "Gender")
+```
+From the plots, it looks like people with 'Moderate' political ideology are a majority in both the parties and both the genders. Although females seem to be more moderate than males. The trend also looks like VL and SL are higher in Democrats while SC and VC are higher in the Republican party. 
+
+```{r Create a contingency table and test for the independence}
+# construct contingency table 
+ideol_gender.table <- xtabs(count ~ ideol + gender, data = pol_ideol_data)
+ideol_party.table <- xtabs(count ~ ideol + party, data = pol_ideol_data)
+
+
+# Chi sq test for independence, or assocstats() from vcd package, or summary()
+chisq.test(x = ideol_party.table)
+chisq.test(x = ideol_gender.table)
+```
+The null and alternative hypothesis for the Chi-squared test are as below: 
+
+$$H_{0}: \pi_{ij} = \pi_{i+}\pi_{+j}$$
+$$H_{a}: \pi_{ij} \neq \pi_{i+}\pi_{+j}$$
+
+The Chi-squared test to assess the independence of political ideology and political party shows a significant p-value. We can reject the null hypothesis and say that there is evidence against independence.
+
+For political ideology and gender, the p-value is significant again, but not as strong as between political ideology and party. Therefore, we reject they null hypothesis again. 
+
+Both gender and party have significant association with political ideology, with party having a much lower p-value meaning a stronger association.  
+
+## Regression analysis  (5 points)
+
+Estimate a multinomial regression model and ordinal (proportional odds) regression model that both include party, gender, and their interaction. Perform Likelihood Ratio Tests (LRTs) to test the importance of each explanatory variable.
+
+Also, test whether the proportional odds assumption in the ordinal model is satisfied. Based on this test and other results, which model do you think is more valid?
+  
+```{r multinomial and ordinal regressions}
+# multinomial regression
+mod.fit.multi <- multinom(formula = ideol ~ party + gender + party:gender, 
+                          data = pol_ideol_data, weight=count)
+summary(mod.fit.multi)
+
+
+# ordinal regression
+mod.fit.ord <- polr(formula = ideol ~ party + gender + party:gender, 
+                    data = pol_ideol_data, weight= count)
+summary(mod.fit.ord )
+```
+One multinomial regression model: 
+$$log(\hat{\pi}_{SL}/\hat{\pi}_{VL}) = 0.066 + 0.38partyR -0.12genderM + 0.09partyR:genderM$$
+One ordinal regression model:
+$$logit(\hat{P}(Y \le j)) = \hat{\beta}_{j0} - 0.76partyR + 0.14genderM - 0.5partyR:genderM$$
+
+```{r LRTs}
+Anova(mod.fit.multi, test="LRT")
+Anova(mod.fit.ord, test="LRT")
+```
+
+The null and the alternative hypothesis for the multinomial model's LRT test are as below:
+$$H_{0}: \beta_{jr} = 0, j=2,3,..,J$$
+$$H_{a}: \beta_{jr} \neq 0$$
+
+From the multinomial regression model, it looks like the gender and the interaction between gender and party are insignificant, while party is statistically significant, given that gender and the interaction between gender and party are in the model. 
+
+
+The null and the alternative hypothesis for the ordinal model's LRT test are as below:
+$$H_{0}: \beta_{r} = 0$$
+$$H_{a}: \beta_{r} \neq 0$$
+From the ordinal regression model, it looks like gender is the only variable which is statistically insignificant. `party` variable is statistically significant and the interaction between party and gender is marginally significant, given the presence of other variables in the model. This is in contrast to the LRT test of the multinomial model in which only the party variable is statistically significant. 
+
+```{r proportional odds assumption}
+mod.fit.ord.po <- vglm(formula = ideol ~ party + gender + party:gender, 
+                       data = pol_ideol_data, weights=count, 
+                       family = cumulative(parallel = TRUE))
+summary(mod.fit.ord.po)
+mod.fit.ord.po@coefficients
+
+mod.fit.ord.npo <- vglm(formula = ideol ~ party + gender + party:gender, 
+                        data = pol_ideol_data, weights=count, 
+                        family = cumulative(parallel = FALSE))
+summary(mod.fit.ord.npo)
+mod.fit.ord.npo@coefficients
+
+tran.LR <- deviance(mod.fit.ord.po) - deviance(mod.fit.ord.npo)
+df <- mod.fit.ord.po@df.residual - mod.fit.ord.npo@df.residual
+p.value <- 1 - pchisq(q = tran.LR, df = df)
+data.frame(tran.LR, df, p.value)
+```
+The hypotheses for the test of the proportional odds assumption are as below:
+$$H_{0}: \beta_{1r} = ... = \beta_{J-1,r}\text{ for }r=1,...,p$$
+and
+$$H_{a}: \text{Not all equal}$$
+
+The LRT results in a statistic of 11.06 and a p-value of 0.27. Thus, there is not sufficient evidence to indicate the proportional odds assumption has been violated. 
+Since the assumption has not been violated, the ordinal (proportional odds) regression model is more valid (as it is efficient and parsimonious with respect to coefficients). 
+ 
+
+## Estimated probabilities  (5 points)
+
+Compute the estimated probabilities for each ideology level given all possible combinations of the party and gender levels.
+
+```{r estimated probabilities for each ideology level}
+newdata <- expand.grid(party = levels(pol_ideol_data$party), 
+                       gender = levels(pol_ideol_data$gender))
+
+pi.hat.ord <- predict(object = mod.fit.ord, type = "probs", newdata=newdata)
+pi.hat.ord
+```
+
+## Contingency table of estimated counts (5 points)
+
+Construct a contingency table with estimated counts from the model. These estimated counts are found by taking the estimated probability for each ideology level multiplied by their corresponding number of observations for a party and gender combination.
+
+For example, there are 264 observations for gender = "F" and party = "D". Because the multinomial regression model results in $\hat{\pi}_{VL} = 0.1667$, this model’s estimated count is $0.1667 \times 264 = 44$.
+
+- Are the estimated counts the same as the observed? Conduct a goodness of fit test for this and explain the results.
+
+```{r a contingency table with estimated counts}
+total_counts <- with(pol_ideol_data, tapply(count, list(party, gender), sum))
+total_counts
+
+
+estimated_counts_ord <- sweep(pi.hat.ord, 2, total_counts, "*")
+
+# Construct table to evaluate goodness of fit
+c.table <- xtabs(formula = count ~ party + ideol + gender, data = pol_ideol_data)
+obv.data <- ftable ( x = c.table, row.vars = c("gender" , "party"),
+                     col.vars = "ideol")
+obv.data
+
+```
+Looks like our predicted (multinomial) and observed values are the same.
+```{r goodness of fit test for observed vs. expected}
+chisq.test(p = obv.data, estimated_counts_ord)
+```
+Looking at the results of our Chisq test, we have a statistically significant result and therefore we reject the null hypothesis that the two samples come from a common distribution.
+
+## Odds ratios and confidence intervals  (8 points)
+
+To better understand relationships between the explanatory variables and the response, compute odds ratios and their confidence intervals from the estimated models and interpret them.
+
+```{r Odds ratios and confidence intervals}
+# Odds ratio
+round(exp(-mod.fit.ord$coefficients), 2)
+```
+
+The estimated odds of VL vs. SL or M or SC or VC is 0.47 times as large for Republicans compared to Democrats, holding the other variables constant.
+
+The estimated odds of VL vs. SL or M or SC or VC is 1.15 times as large for Males compared to Females, holding the other variables constant, but this term is not significant.
+
+
+```{r}
+# Confidence Interval
+coef.beta <- confint(mod.fit.ord, level = 0.95)
+round(exp(-coef.beta),2)
+```
+
+With 95% confidence interval, the odds of political ideology being below a particular level change by 0.34 to 0.65 times for Republicans vs. Democrats, holding the other variables constant.
+
