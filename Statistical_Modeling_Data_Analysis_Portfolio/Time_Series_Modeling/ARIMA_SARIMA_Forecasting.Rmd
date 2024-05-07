@@ -1,0 +1,880 @@
+---
+title: "W271 Assignment 7"
+output: pdf_document
+---
+
+```{r load packages, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(magrittr)
+library(patchwork)
+
+library(lubridate)
+
+library(tsibble)
+library(feasts)
+install.packages('forecast')
+library(forecast)
+
+library(sandwich)
+library(lmtest)
+
+library(nycflights13)
+install.packages('blsR')
+library(blsR)
+```
+
+```{r set themes}
+theme_set(theme_minimal())
+```
+
+# Question-1: AIC and BIC and "Stringency" 
+  
+## (4 points) Part-1 
+
+In the async lecture, Jeffrey says "BIC is in general more stringent than AIC or AICc". Let's illustrate that and reason about it. 
+
+1. Produce a dataset, `d`, that includes 100 observations of pure white-noise.
+   - The outcome variable should be a variable `y` that has 100 draws from `rnorm`, with `mean=0` and `sd=1`.
+   - The input variables should be variables `x1` $\dots$ `x10` that are also 100 draws from `rnorm` each with `mean=0` and `sd=1`.
+   - There are fancy ways to write this code; the goal for this isn't to place a clever coding task in front of you, so feel free to use copy-paste to create the data object in any way that you can.
+2. After producing data, fit 11 models against that data, stored as `model0` through `model10`. (The number appended to `model` corresponds to the number of parameters that you have used in your estimation).
+3. After estimating your models, create a new dataset, `results_data`, that contains the number of parameters that you have used in an estimation, and the AIC and BIC values that you calculated for that number of parameters.
+   1. Note -- this is another place where the way that you create the data, and the way that the data is the most useful to use are incongruent.
+   2. When we created the data, we created a dataset that has a column called `parameters`, a column called `aic` and a column called `bic`.
+   3. However, it is much more useful to have "tidy" data that has these values stacked. If you find yourself creating the dataset in the "wide" form that we have described above, you can use the `dplyr::pivot_longer` function to pivot your data into a tidy format. Specifically, we used this call `pivot_longer(cols = c('aic', 'bic'))` with our input data structure.
+4. Finally, produce a plot that shows the AIC and BIC values on the y-axis and the number of estimated parameters on the x-axis. In the subtitle to your plot, note whether a relatively higher or lower AIC or BIC means that a model is performing better or worse (i.e. either "Higher values are better" or "Lower values are better"). What do you notice about these plots, and what does this tell you about the "stringency" of AIC vs. BIC?
+
+```{r create white-noise data, echo=TRUE}
+d <- data.frame(
+  y = rnorm(100, mean=0, sd=1),
+  x1 = rnorm(100, mean=0, sd=1),
+  x2 = rnorm(100, mean=0, sd=1),
+  x3 = rnorm(100, mean=0, sd=1),
+  x4 = rnorm(100, mean=0, sd=1),
+  x5 = rnorm(100, mean=0, sd=1),
+  x6 = rnorm(100, mean=0, sd=1),
+  x7 = rnorm(100, mean=0, sd=1),
+  x8 = rnorm(100, mean=0, sd=1),
+  x9 = rnorm(100, mean=0, sd=1),
+  x10 = rnorm(100, mean=0, sd=1)
+)
+head(d)
+```
+
+```{r estimate 11 white-noise models, echo=TRUE}
+model0 <- lm(y ~ 1, data=d)
+model1 <- lm(y ~ x1, data=d)
+model2 <- lm(y ~ x1 + x2, data=d)
+model3 <- lm(y ~ x1 + x2 + x3, data=d)
+model4 <- lm(y ~ x1 + x2 + x3 + x4, data=d)
+model5 <- lm(y ~ x1 + x2 + x3 + x4 
+             + x5, data=d)
+model6 <- lm(y ~ x1 + x2 + x3 + x4 
+             + x5 + x6, data=d)
+model7 <- lm(y ~ x1 + x2 + x3 + x4 
+             + x5 + x6 + x7, data=d)
+model8 <- lm(y ~ x1 + x2 + x3 + x4 
+             + x5 + x6 + x7 + x8, data=d)
+model9 <- lm(y ~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + 
+               x8 + x9, data=d)
+model10 <- lm(y ~ x1 + x2 + x3 + x4 
+              + x5 + x6 + x7 + 
+                x8 + x9 + x10, data=d)
+```
+
+```{r make results data with scores of AIC and BIC for each white-noise model, echo=TRUE}
+
+summary(model1)
+
+
+results_data <- data.frame(
+  parameters = c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+  aic = c(AIC(model0), AIC(model1), AIC(model2), 
+          AIC(model3), AIC(model4),
+          AIC(model5), AIC(model6), AIC(model7), 
+          AIC(model8), AIC(model9),
+          AIC(model10)),
+  bic = c(BIC(model0), BIC(model1), BIC(model2), 
+          BIC(model3), BIC(model4),
+          BIC(model5), BIC(model6), BIC(model7), 
+          BIC(model8), BIC(model9),
+          BIC(model10))
+)
+head(results_data)
+
+tidy_data <- pivot_longer(results_data, 
+                          cols = c(aic, bic), 
+                          names_to = "info_criteria", 
+                          values_to = "value")
+head(tidy_data)
+```
+
+```{r plot white-noise model data, echo=TRUE}
+tidy_data %>% ggplot(aes(x=parameters, y = value, color= info_criteria)) + 
+  geom_line() + xlab("Number of Parameters") + ylab("Info Criteria Values") + 
+  ggtitle('AIC and BIC Values vs. Number of Estimated Parameters') + 
+  labs(subtitle = "Lower AIC and BIC Values Mean Model is Performing Better")
+```
+
+Overall, there is a positive association between the number of estimated model parameters used and the AIC values. More parameters are associated with higher AIC values. Similarly, there is a positive association between the number of estimated model parameters used and the BIC values. More parameters are associated with higher BIC values. We see that the BIC increases much faster than the AIC when we increase the number of estimated parameters. This means that the BIC is a more stringent metric than AIC since the larger BIC values would penalize the model more than AIC would.
+
+
+This plot indicates that models with fewer parameters perform better than models with more parameters. This makes sense since we are modeling pure white noise, which is stationary by definition. Due to its constant mean, a constant linear model with 0 parameters would perform best.
+
+
+
+## (2 points) Part-2
+
+Now, suppose that you had data that, *in the population model* actually held a relationship between the input features and the outcome feature. Specifically, suppose that for every unit increase in `x1` there was a `0.1` increase in the outcome, for every unit increase in `x2` there was a `0.2` increase in the outcome, $\dots$, for every unit increase in `x10` there was a `1.0` unit increase in the outcome. Suppose that if all `x1` $\dots$ `x10` were zero, that the outcome would have an expectation of zero, but with white-noise around it with $\mu = 0$ and $\sigma = 1$.  
+
+- Modify the code that you wrote above to create data according to this schedule.
+- Estimate 11 models as before. 
+- Produce a new dataset `resutls_data` that contains the AIC and BIC values from each of these models. 
+- Produce the same plot as you did before with the white noise series. Comment on what, if anything is similar or different between this plot, and the plot you created before. 
+
+```{r create data, echo=TRUE}
+new_d <- d
+new_d$y <- 0.1 * new_d$x1 + 0.2 * new_d$x2 + 0.3 * new_d$x3 + 0.4 * new_d$x4 + 
+    0.5 * new_d$x5 + 0.6 * new_d$x6 + 0.7 * new_d$x7 + 0.8 * new_d$x8 + 
+    0.9 * new_d$x9 + 1 * new_d$x10 + rnorm(100, mean=0, sd=1)
+head(new_d)
+```
+
+```{r estimate models}
+model0 <- lm(y ~ 1, data=new_d)
+model1 <- lm(y ~ x1, data=new_d)
+model2 <- lm(y ~ x1 + x2, data=new_d)
+model3 <- lm(y ~ x1 + x2 + x3, data=new_d)
+model4 <- lm(y ~ x1 + x2 + x3 + x4, data=new_d)
+model5 <- lm(y ~ x1 + x2 + x3 + x4 + x5,
+             data=new_d)
+model6 <- lm(y ~ x1 + x2 + x3 + x4 + x5 
+             + x6, data=new_d)
+model7 <- lm(y ~ x1 + x2 + x3 + x4 + x5 
+             + x6 + x7, data=new_d)
+model8 <- lm(y ~ x1 + x2 + x3 + x4 + x5 
+             + x6 + x7 + x8, data=new_d)
+model9 <- lm(y ~ x1 + x2 + x3 + x4 + x5 
+             + x6 + x7 + 
+               x8 + x9, data=new_d)
+model10 <- lm(y ~ x1 + x2 + x3 + x4 + x5 
+              + x6 + x7 + 
+                x8 + x9 + x10, data=new_d)
+```
+
+```{r make results data with scores of AIC and BIC for each model}
+results_data <- data.frame(
+  parameters = c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+  aic = c(AIC(model0), AIC(model1), AIC(model2), 
+          AIC(model3), AIC(model4),
+          AIC(model5), AIC(model6), AIC(model7), 
+          AIC(model8), AIC(model9),
+          AIC(model10)),
+  bic = c(BIC(model0), BIC(model1), BIC(model2), 
+          BIC(model3), BIC(model4),
+          BIC(model5), BIC(model6), BIC(model7), 
+          BIC(model8), BIC(model9),
+          BIC(model10))
+)
+head(results_data)
+
+tidy_data <- pivot_longer(results_data, 
+                          cols = c(aic, bic), 
+                          names_to = "info_criteria", 
+                          values_to = "value")
+head(tidy_data)
+```
+
+```{r plot model data}
+tidy_data %>% ggplot(aes(x=parameters, y = value, color= info_criteria)) + 
+  geom_line() + xlab("Number of Parameters") + ylab("Info Criteria Values") + 
+  ggtitle('AIC and BIC Values vs. Number of Estimated Parameters') + 
+  labs(subtitle = "Lower AIC and BIC Values Mean Model is Performing Better")
+```
+
+Compared to the plot for the white noise series, this plot shows that increasing the number of estimated
+model parameters will eventually drive down the AIC and BIC values. The BIC values slightly increase but fall drastically past 6 parameters. The AIC values begin with a slight decrease but then begin to fall much quicker for number of parameters greater than 6.
+
+According to the AIC, the constant model with 0 parameters would have the worst performance since it has the highest AIC value. According to the BIC, the model with 6 parameters would have the worst performance since it has the highest BIC value. However, the constant model with 0 parameters also performs poorly compared to models with more than 6 parameters. For both AIC and BIC metrics, the linear model with 10 parameters performs best. This makes sense since we defined the outcome to be a linear function of x1 through x10 plus a white noise term.
+
+
+# Question-2: Weather in NYC 
+ 
+ Our goals with this question are to: 
+ 
+ - (If necessary) Clean up code that we've written before to re-use. This task of writing code, and then coming back and using it later is often overlooked in the MIDS program. Here's a chance to practice! 
+ - Estimate several different polynomial regressions against a time series and evaluate at what point we have produced a model with "enough complexity" that the model evaluation scores cease to tell us that additional model parameters are improving the model fit. 
+ 
+## (1 point) Part-1: Load the Weather Data 
+
+Load the weather data in the same way as you did in the previous assignment, recalling that there was some weird duplication of data for one of the days. Then, create an object, `weather_weekly` that aggregates the data to have two variables `average_temperature` and `average_dewpoint` at the year-week level, for each airport. After your aggregation is complete, you should have a `tsibble` that has the following shape: 
+
+    A tsibble: 159 x 4 [1W]
+    # Key:       origin [3]
+       origin week_index average_temperature average_dewpoint
+       <chr>      <week>               <dbl>            <dbl>
+     1 EWR      2013 W01                34.3            19.4 
+     2 EWR      2013 W02                42.7            33.3 
+     3 EWR      2013 W03                39.6            26.5 
+
+```{r create weekly weather data}
+head(weather)
+```
+
+```{r echo=TRUE}
+weather_weekly <- weather %>%
+   mutate(time_index = make_datetime(year, month, day, hour)) %>% 
+   mutate(week_index = yearweek(time_index)) %>%
+   select(origin, week_index, temp, dewp) %>% group_by(origin, week_index) %>% 
+   summarise(average_temperature = round(mean(temp), 1), 
+            average_dewpoint=round(mean(dewp), 1)) %>% ungroup() %>%
+   as_tsibble(index=week_index, key = c(origin)) 
+weather_weekly
+```
+
+
+## (2 points) Part-2: Fit Polynomial Regression Models 
+
+For each of the `average_temperature` and `average_dewpoint` create ten models that include polynomials of increasing order. 
+
+- One issue that you're likely to come across is dealing with how to make the time index that you're using in your `tsibble` work with either `poly` or some other function to produce the polynomial terms; this arises because although the time index is ordered, it isn't really a "numeric" feature so when you call for something like, `poly(week_index, degree=2)` you will be met with an error. 
+- Cast the index to a numeric variable, where the first week is indexed to be `0`. Recall that Jeffrey notes that this form of translation only changes the way that the intercept is interpreted; we will note that because the `as.numeric(week_index)` creates input variables that are in the vicinity, it also changes the magnitude of the higher-order polynomial terms that are estimated, though it does not change the regression diagnostics and model scoring to transform (or not) these time index variables. 
+
+Additionally, you might recall that in 203, we actually recommended you away from using the `poly` function. That was a recommendation based on students' knowledge at the time, when we were considering fitting log and square root transformations of data. At this point, you can handle the additional complexity and can take the recommendation that `poly` is nice for working with polynomial translations of time. 
+
+```{r create a numeric_week variable with minimum value of zero, echo=TRUE}
+weather_tsib_cast <- weather_weekly
+weather_tsib_cast$week_index <- as.numeric(weather_tsib_cast$week_index) - 2244
+weather_tsib_cast
+```
+
+In order to map the first week to an index of 0, we subtract 2244 from the as.numeric(week_index) 
+result since the output for the first week is 2244.
+
+```{r fit models for average_temperature and average_dewpoint, echo=TRUE}
+# Models for average_temperature
+
+avg_temp_mod1 <- lm(average_temperature ~ poly(week_index, 1), 
+                    data = weather_tsib_cast, na.action = na.omit)
+avg_temp_mod1
+
+avg_temp_mod2 <- lm(average_temperature ~ poly(week_index, 2), 
+                    data = weather_tsib_cast, na.action = na.omit)
+avg_temp_mod2
+
+avg_temp_mod3 <- lm(average_temperature ~ poly(week_index, 3), 
+                    data = weather_tsib_cast, na.action = na.omit)
+avg_temp_mod3
+
+avg_temp_mod4 <- lm(average_temperature ~ poly(week_index, 4), 
+                    data = weather_tsib_cast, na.action = na.omit)
+avg_temp_mod4
+
+avg_temp_mod5 <- lm(average_temperature ~ poly(week_index, 5), 
+                    data = weather_tsib_cast, na.action = na.omit)
+avg_temp_mod5
+
+avg_temp_mod6 <- lm(average_temperature ~ poly(week_index, 6), 
+                    data = weather_tsib_cast, na.action = na.omit)
+avg_temp_mod6
+
+avg_temp_mod7 <- lm(average_temperature ~ poly(week_index, 7), 
+                    data = weather_tsib_cast, na.action = na.omit)
+avg_temp_mod7
+
+avg_temp_mod8 <- lm(average_temperature ~ poly(week_index, 8), 
+                    data = weather_tsib_cast, na.action = na.omit)
+avg_temp_mod8
+
+avg_temp_mod9 <- lm(average_temperature ~ poly(week_index, 9), 
+                    data = weather_tsib_cast, na.action = na.omit)
+avg_temp_mod9
+
+avg_temp_mod10 <- lm(average_temperature ~ poly(week_index, 10), 
+                     data = weather_tsib_cast, na.action = na.omit)
+avg_temp_mod10
+
+# Models for average_dewpoint
+avg_dewp_mod1 <- lm(average_dewpoint ~ poly(week_index, 1), 
+                    data = weather_tsib_cast, na.action = na.omit)
+avg_dewp_mod1
+
+avg_dewp_mod2 <- lm(average_dewpoint ~ poly(week_index, 2), 
+                    data = weather_tsib_cast, na.action = na.omit)
+avg_dewp_mod2
+
+avg_dewp_mod3 <- lm(average_dewpoint ~ poly(week_index, 3), 
+                    data = weather_tsib_cast, na.action = na.omit)
+avg_dewp_mod3
+
+
+avg_dewp_mod4 <- lm(average_dewpoint ~ poly(week_index, 4), 
+                    data = weather_tsib_cast, na.action = na.omit)
+avg_dewp_mod4
+
+
+avg_dewp_mod5 <- lm(average_dewpoint ~ poly(week_index, 5), 
+                    data = weather_tsib_cast, na.action = na.omit)
+avg_dewp_mod5
+
+
+avg_dewp_mod6 <- lm(average_dewpoint ~ poly(week_index, 6), 
+                    data = weather_tsib_cast, na.action = na.omit)
+avg_dewp_mod6
+
+
+avg_dewp_mod7 <- lm(average_dewpoint ~ poly(week_index, 7), 
+                    data = weather_tsib_cast, na.action = na.omit)
+avg_dewp_mod7
+
+
+avg_dewp_mod8 <- lm(average_dewpoint ~ poly(week_index, 8), 
+                    data = weather_tsib_cast, na.action = na.omit)
+avg_dewp_mod8
+
+
+avg_dewp_mod9 <- lm(average_dewpoint ~ poly(week_index, 9), 
+                    data = weather_tsib_cast, na.action = na.omit)
+avg_dewp_mod9
+
+
+avg_dewp_mod10 <- lm(average_dewpoint ~ poly(week_index, 10), 
+                    data = weather_tsib_cast, na.action = na.omit)
+avg_dewp_mod10
+
+```
+
+## (2 points) Part-3: Evalute the model fits best for each outcomes
+
+For each of the outcomes -- `average_temperature` at the weekly level, and `average_dewpoint` at the weekly level -- make an assessment based on either AIC or BIC for why one polynomial degree produces the best fitting model. In doing so, describe why you have chosen to use either AIC or BIC, what the particular scoring of this metric is doing (i.e. write the formula, and explain to your reader what is happening in that formula). Especially compelling in producing your argument for why you prefer a particular model form is to create a plot of the polynomial degree on the x-axis and the metric score on the y-axis. 
+
+
+```{r evalute BIC for temperature, echo=TRUE}
+model_temp_results_data <- data.frame(
+  degree = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+  aic = c(AIC(avg_temp_mod1), AIC(avg_temp_mod2), AIC(avg_temp_mod3), 
+          AIC(avg_temp_mod4), AIC(avg_temp_mod5),
+          AIC(avg_temp_mod6), AIC(avg_temp_mod7), AIC(avg_temp_mod8),
+          AIC(avg_temp_mod9), AIC(avg_temp_mod10)),
+  bic = c(BIC(avg_temp_mod1), BIC(avg_temp_mod2), BIC(avg_temp_mod3), 
+          BIC(avg_temp_mod4), BIC(avg_temp_mod5),
+          BIC(avg_temp_mod6), BIC(avg_temp_mod7), BIC(avg_temp_mod8), 
+          BIC(avg_temp_mod9), BIC(avg_temp_mod10))
+)
+head(model_temp_results_data)
+
+tidy_temp_data <- pivot_longer(model_temp_results_data, 
+                               cols = c(aic, bic), 
+                          names_to = "info_criteria", values_to = "value")
+head(tidy_temp_data)
+
+```
+```{r echo=TRUE}
+tidy_temp_data %>% ggplot(aes(x=degree, y = value, color= info_criteria)) + 
+  geom_line() + xlab("Degree") + ylab("Info Criteria Values") + 
+  ggtitle('AIC and BIC Values vs. Degree of Polynomial Model (Temp Model)') + 
+  labs(subtitle = "Lower AIC and BIC Values Mean Model is Performing Better")
+```
+
+
+
+
+```{r evaluate BIC for dewpoint, echo=TRUE}
+model_dewp_results_data <- data.frame(
+  degree = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+  aic = c(AIC(avg_dewp_mod1), AIC(avg_dewp_mod2), AIC(avg_dewp_mod3), 
+          AIC(avg_dewp_mod4), AIC(avg_dewp_mod5),
+          AIC(avg_dewp_mod6), AIC(avg_dewp_mod7), AIC(avg_dewp_mod8), 
+          AIC(avg_dewp_mod9), AIC(avg_dewp_mod10)),
+  bic = c(BIC(avg_dewp_mod1), BIC(avg_dewp_mod2), BIC(avg_dewp_mod3), 
+          BIC(avg_dewp_mod4), BIC(avg_dewp_mod5),
+          BIC(avg_dewp_mod6), BIC(avg_dewp_mod7), BIC(avg_dewp_mod8), 
+          BIC(avg_dewp_mod9), BIC(avg_dewp_mod10))
+)
+head(model_dewp_results_data)
+
+tidy_dewp_data <- pivot_longer(model_dewp_results_data, 
+                               cols = c(aic, bic), 
+                          names_to = "info_criteria", values_to = "value")
+head(tidy_dewp_data)
+```
+
+```{r echo=TRUE}
+tidy_dewp_data %>% ggplot(aes(x=degree, y = value, color= info_criteria)) + 
+  geom_line() + xlab("Degree") + ylab("Info Criteria Values") + 
+  ggtitle('AIC and BIC Values vs. Degree of Polynomial Model (Dewpoint Model)') + 
+  labs(subtitle = "Lower AIC and BIC Values Mean Model is Performing Better")
+```
+
+
+Looking at these two BIC scoring criteria there seems to be a clear **lack** of improvement beyond a polynomial order of four. *Perhaps* moving from four to five would still increase the model's performance, but it is small compared to the polynomials 2-4. For us, if we were fitting this model, we would be likely to stop at `poly( , degree = 4)`. 
+
+Based on the plots for both average_temperature and average_dewpoint, we would use the AIC to help decide the best fitting polynomial model. While the BIC does not really improve beyond degree 4, the AIC drops slightly below 900 for average_temperature and slightly below 1000 for average_dewpoint, the lowest points for the AIC for both models respectively. Hence, the AIC helps differentiate which degree polynomial is better when the BIC fails to improve. Based on the plots, if we were to use the AIC, we would choose the polynomial of degree 10 since the model for both average_temperature and average_depoint corresponds to the lowest AIC values.
+
+The AIC consists of the negative log likelihood and a term proportional to the number of parameters in the model. A lower AIC means that the log likelihood is large compared to the effect of the number of parameters on the AIC value, indicating that the log likelihood is larger for lower AIC values. Since the degree 10 polynomial corresponds to the lowest AIC values for both average_temperature and average_dewpoint, the degree 10 polynomial is the best fitting model.
+
+
+# Question-3: Smooth Moves 
+
+In the async lecture, Jeffrey proposes four different smoothers that might be used: 
+
+1. **Moving Average**: These moving average smoothers can be either symmetric or, often preferred, backward smoothers. Please use a backward smoother, and make the choice about the number of periods based off of some evaluation of different choices. You might consult [[this page](https://otexts.com/fpp3/moving-averages.html)] in *Forecasting Principles and Practice 3*. 
+2. **Regression Smoothers**: Please use the polynomial regression that you stated you most preferred from your BIC analysis to the last question. 
+3. (Optional) **Spline Smoothers**: There is a reading in the repository that provides some more background (it is a review from 2019) on using spline smoothers. The current implementation that we prefer in R is the `splines2` library. For your spline smoother, use the `splines2::naturalSpline` function. Once you have fitted this spline, you can use the `predict` method to produce values. A good starting place for this is [[here](https://wwenjie.org/splines2/articles/splines2-intro#natural-cubic-splines)]. We'll note that this is the most challenging of the smoothers to get running in this assignment, and so getting it running successfully is optional. 
+4. **Kernel Smoothers**.: Please use the `ksmooth` function that is available to you in the `stats` library. Because `stats` is always loaded in R, we have not referred to it using the `::` notation.  
+
+## (6 points, with 2 optional) Part-1: Create Smoothers 
+
+With the weekly weather data that you used for the previous question, produce a smoothed variable for `average_temperature` and `average_dewpoint` using each of the four smoothers described in the async. Three smoothers are required of this question -- (1) Moving Average; (2) Regression Smoothers; and, (3) Kernel Smoothers. The fourth, splines, is optional but if you produce a spline smoother that is working effectively, you can earn two bonus points. (Note that the homework maximum score is still 100%.) 
+
+When you are done with this task, you should have created eight new variables that are each a smoothed version of this series.
+
+For each smoother that you produce: 
+
+- Fit the smoother **within** each origin. That is, fit the smoother for JFK separately from LaGuardia and Newark.  
+- Attach the values that are produced by the smoother onto the `weekly_weather` dataframe. 
+- Produce a plot that shows the original data as `geom_point()`, and the smoother's predictions as `geom_line()`.
+- Your goal is not to produce **any** smoother, but instead, for each class of smoother, the version that is doint the best job that is possible by this smoother. That is, you are working through the hyperparametrs to these algorithms to produce their most effective output. 
+
+```{r echo=TRUE}
+install.packages('slider')
+library(slider)
+```
+
+```{r moving average smoother, echo=TRUE}
+weekly_weather <- weather_weekly
+weekly_weather$week_index <- as.numeric(weekly_weather$week_index) - 2244
+head(weekly_weather)
+```
+ 
+```{r echo=TRUE}
+unique(weekly_weather$origin)
+weekly_weather %>% filter(origin == 'EWR') %>% 
+  ggplot(aes(x=week_index, average_temperature)) + 
+  geom_line() + ggtitle("Weekly Average Temperature for EWR")
+```
+
+```{r echo=TRUE}
+ewr_ma_temp <- weekly_weather %>%
+  filter(origin == 'EWR') %>%
+  mutate(
+    backwards_ma = slider::slide_dbl(average_temperature, mean,
+                .before = 1, .after = 0, .complete = TRUE)
+  )
+ewr_ma_temp
+```
+```{r echo=TRUE}
+ewr_ma_temp <- ewr_ma_temp %>% as_tsibble(index=week_index, key=origin)
+ewr_ma_temp
+
+
+ewr_ma_temp |>
+  autoplot(average_temperature) +
+  geom_line(aes(y = backwards_ma), colour = "#D55E00") +
+  labs(x = "Week Number", y = "Weekly Average Temperature",
+       title = "EWR Weekly Average Temperature (along with Backwards MA of Order 2)")
+
+```
+
+
+
+```{r echo=TRUE}
+unique(weekly_weather$origin)
+weekly_weather %>% filter(origin == 'JFK') %>% 
+  ggplot(aes(x=week_index, average_temperature)) + 
+  geom_line() + ggtitle("Weekly Average Temperature for JFK")
+```
+
+```{r echo=TRUE}
+jfk_ma_temp <- weekly_weather %>%
+  filter(origin == 'JFK') %>%
+  mutate(
+    backwards_ma = slider::slide_dbl(average_temperature, mean,
+                .before = 1, .after = 0, .complete = TRUE)
+  )
+jfk_ma_temp
+```
+```{r echo=TRUE}
+jfk_ma_temp <- jfk_ma_temp %>% as_tsibble(index=week_index, key=origin)
+jfk_ma_temp
+
+
+jfk_ma_temp |>
+  autoplot(average_temperature) +
+  geom_line(aes(y = backwards_ma), colour = "#D55E00") +
+  labs(x = "Week Number", y = "Weekly Average Temperature",
+       title = "JFK Weekly Average Temperature (along with 
+       Backwards MA of Order 2)")
+```
+
+
+```{r echo=TRUE}
+weekly_weather %>% filter(origin == 'LGA') %>% 
+  ggplot(aes(x=week_index, average_temperature)) + geom_line() + 
+  ggtitle("Weekly Average Temperature for LGA")
+```
+
+```{r echo=TRUE}
+lga_ma_temp <- weekly_weather %>%
+  filter(origin == 'LGA') %>%
+  mutate(
+    backwards_ma = slider::slide_dbl(average_temperature, mean,
+                .before = 1, .after = 0, .complete = TRUE)
+  )
+lga_ma_temp
+```
+
+```{r echo=TRUE}
+lga_ma_temp <- lga_ma_temp %>% as_tsibble(index=week_index, key=origin)
+lga_ma_temp
+
+
+lga_ma_temp |>
+  autoplot(average_temperature) +
+  geom_line(aes(y = backwards_ma), colour = "#D55E00") +
+  labs(x = "Week Number", y = "Weekly Average Temperature",
+       title = "LGA Weekly Average Temperature (along with 
+       Backwards MA of Order 2)")
+```
+```{r echo=TRUE}
+weekly_weather %>% filter(origin == 'EWR') %>% 
+  ggplot(aes(x=week_index, average_dewpoint)) + geom_line() + 
+  ggtitle("Weekly Average Dewpoint for EWR")
+```
+```{r echo=TRUE}
+ewr_ma_dewp <- weekly_weather %>%
+  filter(origin == 'EWR') %>%
+  mutate(
+    backwards_ma = slider::slide_dbl(average_dewpoint, mean,
+                .before = 1, .after = 0, .complete = TRUE)
+  )
+ewr_ma_dewp
+```
+ 
+```{r echo=TRUE}
+ewr_ma_dewp <- ewr_ma_dewp %>% as_tsibble(index=week_index, key=origin)
+ewr_ma_dewp
+
+
+ewr_ma_dewp |>
+  autoplot(average_dewpoint) +
+  geom_line(aes(y = backwards_ma), colour = "#D55E00") +
+  labs(x = "Week Number", y = "Weekly Average Dewpoint",
+       title = "EWR Weekly Average Dewpoint (along with 
+       Backwards MA of Order 2)") 
+```
+```{r echo=TRUE}
+weekly_weather %>% filter(origin == 'JFK') %>% 
+  ggplot(aes(x=week_index, average_dewpoint)) + geom_line() + 
+  ggtitle("Weekly Average Dewpoint for JFK")
+```
+```{r echo=TRUE}
+jfk_ma_dewp <- weekly_weather %>%
+  filter(origin == 'JFK') %>%
+  mutate(
+    backwards_ma = slider::slide_dbl(average_dewpoint, mean,
+                .before = 1, .after = 0, .complete = TRUE)
+  )
+jfk_ma_dewp
+```
+
+```{r echo=TRUE}
+jfk_ma_dewp <- jfk_ma_dewp %>% as_tsibble(index=week_index, key=origin)
+jfk_ma_dewp
+
+
+jfk_ma_dewp |>
+  autoplot(average_dewpoint) +
+  geom_line(aes(y = backwards_ma), colour = "#D55E00") +
+  labs(x = "Week Number", y = "Weekly Average Dewpoint",
+       title = "JFK Weekly Average Dewpoint (along with 
+       Backwards MA of Order 2)") 
+```
+```{r echo=TRUE}
+weekly_weather %>% filter(origin == 'LGA') %>% 
+  ggplot(aes(x=week_index, average_dewpoint)) + geom_line() + 
+  ggtitle("Weekly Average Dewpoint for LGA")
+```
+```{r echo=TRUE}
+lga_ma_dewp <- weekly_weather %>%
+  filter(origin == 'LGA') %>%
+  mutate(
+    backwards_ma = slider::slide_dbl(average_dewpoint, mean,
+                .before = 1, .after = 0, .complete = TRUE)
+  )
+lga_ma_dewp
+```
+```{r echo=TRUE}
+lga_ma_dewp <- lga_ma_dewp %>% as_tsibble(index=week_index, key=origin)
+lga_ma_dewp
+
+
+lga_ma_dewp |>
+  autoplot(average_dewpoint) +
+  geom_line(aes(y = backwards_ma), colour = "#D55E00") +
+  labs(x = "Week Number", y = "Weekly Average Dewpoint",
+       title = "LGA Weekly Average Dewpoint (along with 
+       Backwards MA of Order 2)")
+```
+
+ 
+ 
+ 
+ 
+```{r regression smoother, echo=TRUE}
+ewr_data <- weekly_weather %>%
+  filter(origin == 'EWR')
+ewr_reg_smoother <- lm(average_temperature ~ poly(week_index, 10), 
+                    data = ewr_data, na.action = na.omit)
+
+ewr_data$temp_predictions <- predict(ewr_reg_smoother, newdata = ewr_data)
+head(ewr_data)
+```
+```{r echo=TRUE}
+ewr_data <- ewr_data %>% as_tsibble(index=week_index, key=origin)
+ewr_data
+
+
+ewr_data |>
+  autoplot(average_temperature) +
+  geom_line(aes(y = temp_predictions), colour = "#D55E00") +
+  labs(x = "Week Number", y = "Weekly Average Temperature",
+       title = "EWR Weekly Average Temperature (along with 
+       Regression Smoother Prediction)")
+```
+```{r echo=TRUE}
+jfk_data <- weekly_weather %>%
+  filter(origin == 'JFK')
+jfk_reg_smoother <- lm(average_temperature ~ poly(week_index, 10), 
+                    data = jfk_data, na.action = na.omit)
+
+jfk_data$temp_predictions <- predict(jfk_reg_smoother, newdata = jfk_data)
+head(jfk_data)
+```
+```{r echo=TRUE}
+jfk_data <- jfk_data %>% as_tsibble(index=week_index, key=origin)
+jfk_data
+
+
+jfk_data |>
+  autoplot(average_temperature) +
+  geom_line(aes(y = temp_predictions), colour = "#D55E00") +
+  labs(x = "Week Number", y = "Weekly Average Temperature",
+       title = "JFK Weekly Average Temperature (along with 
+       Regression Smoother Prediction)")
+```
+```{r echo=TRUE}
+lga_data <- weekly_weather %>%
+  filter(origin == 'LGA')
+lga_reg_smoother <- lm(average_temperature ~ poly(week_index, 10), 
+                    data = lga_data, na.action = na.omit)
+
+lga_data$temp_predictions <- predict(lga_reg_smoother, newdata = lga_data)
+head(lga_data)
+```
+
+```{r echo=TRUE}
+lga_data <- lga_data %>% as_tsibble(index=week_index, key=origin)
+lga_data
+
+
+lga_data |>
+  autoplot(average_temperature) +
+  geom_line(aes(y = temp_predictions), colour = "#D55E00") +
+  labs(x = "Week Number", y = "Weekly Average Temperature",
+       title = "LGA Weekly Average Temperature (along with 
+       Regression Smoother Prediction)")
+```
+
+```{r echo=TRUE}
+ewr_dewp_data <- weekly_weather %>%
+  filter(origin == 'EWR')
+ewr_reg_smoother <- lm(average_dewpoint ~ poly(week_index, 10), 
+                    data = ewr_dewp_data, na.action = na.omit)
+
+ewr_dewp_data$dewp_predictions <- predict(ewr_reg_smoother, 
+                                          newdata = ewr_dewp_data)
+head(ewr_dewp_data)
+```
+```{r echo=TRUE}
+ewr_dewp_data <- ewr_dewp_data %>% as_tsibble(index=week_index, key=origin)
+ewr_dewp_data
+
+
+ewr_dewp_data |>
+  autoplot(average_dewpoint) +
+  geom_line(aes(y = dewp_predictions), colour = "#D55E00") +
+  labs(x = "Week Number", y = "Weekly Average Dewpoint",
+       title = "EWR Weekly Average Dewpoint (along with 
+       Regression Smoother Prediction)")
+```
+```{r echo=TRUE}
+jfk_dewp_data <- weekly_weather %>%
+  filter(origin == 'JFK')
+jfk_reg_smoother <- lm(average_dewpoint ~ poly(week_index, 10), 
+                    data = jfk_dewp_data, na.action = na.omit)
+
+jfk_dewp_data$dewp_predictions <- predict(jfk_reg_smoother, 
+                                          newdata = jfk_dewp_data)
+head(jfk_dewp_data)
+```
+```{r echo=TRUE}
+jfk_dewp_data <- jfk_dewp_data %>% as_tsibble(index=week_index, key=origin)
+jfk_dewp_data
+
+
+jfk_dewp_data |>
+  autoplot(average_dewpoint) +
+  geom_line(aes(y = dewp_predictions), colour = "#D55E00") +
+  labs(x = "Week Number", y = "Weekly Average Dewpoint",
+       title = "JFK Weekly Average Dewpoint (along with 
+       Regression Smoother Prediction)")
+
+```
+```{r echo=TRUE}
+lga_dewp_data <- weekly_weather %>%
+  filter(origin == 'LGA')
+lga_reg_smoother <- lm(average_dewpoint ~ poly(week_index, 10), 
+                    data = lga_dewp_data, na.action = na.omit)
+
+lga_dewp_data$dewp_predictions <- predict(lga_reg_smoother, 
+                                          newdata = lga_dewp_data)
+head(lga_dewp_data)
+```
+
+```{r echo=TRUE}
+lga_dewp_data <- lga_dewp_data %>% as_tsibble(index=week_index, key=origin)
+lga_dewp_data
+
+
+lga_dewp_data |>
+  autoplot(average_dewpoint) +
+  geom_line(aes(y = dewp_predictions), colour = "#D55E00") +
+  labs(x = "Week Number", y = "Weekly Average Dewpoint",
+       title = "LGA Weekly Average Dewpoint (along with 
+       Regression Smoother Prediction)")
+```
+
+
+```{r kernel smoother, echo=TRUE}
+ewr_data <- weekly_weather %>%
+  filter(origin == 'EWR')
+smoothed_ewr_temp <- ksmooth(x=ewr_data$week_index, 
+                             y=ewr_data$average_temperature, 
+                             kernel = "normal", bandwidth=0.5, n.points = 53)
+ewr_data$kernel_temp_predictions <- smoothed_ewr_temp$y
+
+ewr_data <- ewr_data %>% as_tsibble(index=week_index, key=origin)
+ewr_data
+
+
+ewr_data |>
+  autoplot(average_temperature) + 
+  geom_line(aes(y = kernel_temp_predictions), colour = "#D55E00") +
+  labs(x = "Week Number", y = "Weekly Average Temperature",
+       title = "EWR Weekly Average 
+       Temperature (along with Kernel Smoother Prediction)")
+
+```
+
+```{r echo=TRUE}
+jfk_data <- weekly_weather %>%
+  filter(origin == 'JFK')
+smoothed_jfk_temp <- ksmooth(x=jfk_data$week_index, 
+                             y=jfk_data$average_temperature, 
+                             kernel = "normal", bandwidth=0.5, 
+                             n.points = 53)
+jfk_data$kernel_temp_predictions <- smoothed_jfk_temp$y
+
+jfk_data <- jfk_data %>% as_tsibble(index=week_index, key=origin)
+jfk_data
+
+
+jfk_data |>
+  autoplot(average_temperature) + 
+  geom_line(aes(y = kernel_temp_predictions), colour = "#D55E00") +
+  labs(x = "Week Number", y = "Weekly Average Temperature",
+       title = "JFK Weekly Average 
+       Temperature (along with Kernel Smoother Prediction)")
+```
+```{r echo=TRUE}
+lga_data <- weekly_weather %>%
+  filter(origin == 'LGA')
+smoothed_lga_temp <- ksmooth(x=lga_data$week_index, 
+                             y=lga_data$average_temperature, 
+                             kernel = "normal", bandwidth=0.5, n.points = 53)
+lga_data$kernel_temp_predictions <- smoothed_lga_temp$y
+
+lga_data <- lga_data %>% 
+  as_tsibble(index=week_index, key=origin)
+lga_data
+
+
+lga_data |>
+  autoplot(average_temperature) + 
+  geom_line(aes(y = kernel_temp_predictions), colour = "#D55E00") +
+  labs(x = "Week Number", y = "Weekly Average Temperature",
+       title = "LGA Weekly Average Temperature 
+       (along with Kernel Smoother Prediction)")
+```
+```{r echo=TRUE}
+ewr_data <- weekly_weather %>%
+  filter(origin == 'EWR')
+smoothed_ewr_dewp <- ksmooth(x=ewr_data$week_index, 
+                             y=ewr_data$average_dewpoint, kernel = "normal", 
+                             bandwidth=0.5, n.points = 53)
+ewr_data$kernel_dewp_predictions <- smoothed_ewr_dewp$y
+
+ewr_data <- ewr_data %>% as_tsibble(index=week_index, key=origin)
+ewr_data
+
+
+ewr_data |>
+  autoplot(average_dewpoint) + 
+  geom_line(aes(y = kernel_dewp_predictions), colour = "#D55E00") +
+  labs(x = "Week Number", y = "Weekly Average Dewpoint",
+       title = "EWR Weekly Average Dewpoint 
+       (along with Kernel Smoother Prediction)")
+```
+
+```{r echo=TRUE}
+
+jfk_data <- weekly_weather %>%
+  filter(origin == 'JFK')
+smoothed_jfk_dewp <- ksmooth(x=jfk_data$week_index, 
+                             y=jfk_data$average_dewpoint, kernel = "normal", 
+                             bandwidth=0.5, n.points = 53)
+jfk_data$kernel_dewp_predictions <- smoothed_jfk_dewp$y
+
+jfk_data <- jfk_data %>% as_tsibble(index=week_index, key=origin)
+jfk_data
+
+
+jfk_data |>
+  autoplot(average_dewpoint) + 
+  geom_line(aes(y = kernel_dewp_predictions), colour = "#D55E00") +
+  labs(x = "Week Number", y = "Weekly Average Dewpoint",
+       title = "JFK Weekly Average Dewpoint 
+       (along with Kernel Smoother Prediction)")
+```
+
+```{r echo=TRUE}
+lga_data <- weekly_weather %>%
+  filter(origin == 'LGA')
+smoothed_lga_dewp <- ksmooth(x=lga_data$week_index, 
+                             y=lga_data$average_dewpoint,
+                             kernel = "normal", bandwidth=0.5, n.points = 53)
+lga_data$kernel_dewp_predictions <- smoothed_lga_dewp$y
+
+lga_data <- lga_data %>% as_tsibble(index=week_index, key=origin)
+lga_data
+
+
+lga_data |>
+  autoplot(average_dewpoint) + 
+  geom_line(aes(y = kernel_dewp_predictions), colour = "#D55E00") +
+  labs(x = "Week Number", y = "Weekly Average Dewpoint",
+       title = "LGA Weekly Average Dewpoint 
+       (along with Kernel Smoother Prediction)")
+```
+
