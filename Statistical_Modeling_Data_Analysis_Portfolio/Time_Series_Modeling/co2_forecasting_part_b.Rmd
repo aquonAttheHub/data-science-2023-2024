@@ -1,0 +1,285 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+```{r load packages, echo = FALSE, message = FALSE, warning=FALSE}
+library(tidyverse)
+library(tsibble)
+library(latex2exp)
+library(feasts)
+library(forecast)
+library(patchwork)
+library(fable)
+library(knitr)
+
+theme_set(theme_minimal())
+knitr::opts_chunk$set(dpi=1000, fig.align="center")
+```
+
+## Introduction
+
+
+Building on our 1997 report, we continue to investigate the critical question- how has atmospheric carbon dioxide ($CO_2$) concentrations evolved since our last analysis and what would the forecasts be?
+
+Since 1997, the data generating process has largely remained consistent, with continuous measurements being taken at the Mauna Loa Observatory. However, the rate of $CO_2$ accumulation in the atmosphere has shown signs of acceleration, a concerning trend that underscores the urgency of addressing climate change.
+
+In this report, we will delve deeper into the updated dataset, extending our previous models to capture these recent dynamics. Our aim remains to stimulate conversation about the potential impacts on Earth's ecosystem and the influence of human activities on global climate, all in the context of rising $CO_2$ levels. We hope this report will serve as a valuable resource for future investigations on this subject within our laboratory and beyond.
+
+With this updated data, let us now proceed with our investigation.
+
+## Create a modern data pipeline (1b)
+
+```{r}
+# Load data
+co2_present <- read.csv("co2_weekly_mlo.csv", comment.char = "#")
+
+# There are no "missing" values but there are values where the average is -999
+co2_present <- co2_present[co2_present$average >= 0, ]
+
+# Index and convert to tsibble
+co2_present <- co2_present %>%
+                mutate(date=make_date(year, month, day)) %>%
+                mutate(index=yearweek(date)) %>%
+                as_tsibble(index=index) %>%
+                mutate(value=average)
+```
+
+```{r echo=FALSE, fig.width=4, fig.height=2, fig.align='center'}
+# EDA
+monthly_avg_plot <- co2_present %>%
+ ggplot() + 
+  aes(x=index, y=value) +
+  geom_line(color = 'steelblue') +
+  labs(
+    title = TeX(r'(Monthly Mean $CO_2$)'),
+    subtitle = 'The "Keeling Curve"',
+    x = 'Month and Year',
+    y = TeX(r'($CO_2$ parts per million)'))
+```
+```{r echo = FALSE, fig.width=6, fig.height=3.5}
+# Correlation
+acf <- co2_present$value %>%  ggAcf() + labs(title = TeX(r'(ACF $CO_2$)'))
+pacf <- co2_present$value %>%  ggPacf() + labs(title = TeX(r'(PACF $CO_2$)'))
+(monthly_avg_plot) / (acf | pacf)
+```
+The Keeling Curve hasn't evolved drastically from 1997. The trend looks very similar as earlier but there seems to be a very slight dip around the years 1997-1999. There seems to be some variation in the crests of the seasonality but overall the periods of seasonality remain the same. In conclusion, the curve is largely similar to the data evaluated in 1997. Let us now explore the autocorrelation. The ACF and PACF plots show that the current values of lag are significantly correlated to the previous ones. There is no constant mean and variance. 
+
+```{r echo= FALSE}
+# Convert weekly to monthly
+co2_monthly <- co2_present %>%
+  index_by(date = yearmonth(date)) %>%
+  summarise(value = mean(value)) 
+```
+
+```{r echo=FALSE, warning=FALSE}
+# Load forecasts made in the year 1997
+load("linear_mult_forecasts.RData")
+load("linear_add_forecasts.RData")
+load("mult_arima_forecasts.RData")
+load("add_arima_forecasts.RData")
+```
+
+#  Compare linear model forecasts against realized CO2 (2b)
+
+```{r echo=FALSE, fig.width=6, fig.height=2.8, warning=FALSE, message=FALSE}
+lin_add_forecast_comp <- autoplot(linear_add_forecasts) + autolayer(co2_monthly) + 
+  labs(title = TeX(r'(Forecast comparison of Additive Linear Model of $CO_2$)'))
+lin_mult_forecast_comp <- autoplot(linear_mult_forecasts) + autolayer(co2_monthly) + 
+  labs(title = TeX(r'(Forecast comparison of Multiplicative Linear Model of $CO_2$)'))
+lin_add_forecast_comp / lin_mult_forecast_comp
+```
+Figure above shows forecasts of both additive and multiplicative decomposed linear models fitted in 1997, layered to the realized data. We can see from the first plot which is forecasting `linear_add_forecasts` aligns very closely and is similar to the realized data. The `linear_mult_forecasts` predictions align well with the realized data in the early years of the forecast, but then slowly deviates as time progresses.
+
+## Compare ARIMA models forecasts against realized CO2 (3b)
+
+```{r echo=FALSE, fig.width=6, fig.height=2.8, warning=FALSE, message=FALSE}
+arima_add_forecast_comp <- autoplot(add_arima_forecasts) + autolayer(co2_monthly) + 
+  labs(title = TeX(r'(Forecast comparison of Additive ARIMA Model of $CO_2$)'))
+arima_mult_forecast_comp <- autoplot(mult_arima_forecasts) + autolayer(co2_monthly) + 
+  labs(title = TeX(r'(Forecast comparison of Multiplicative ARIMA Model of $CO_2$)'))
+arima_add_forecast_comp / arima_mult_forecast_comp
+```
+From the image above, the predictions from both ARIMA models fitted in 1997 initially align with the actual data but eventually deviate. Specifically, after a few years post-1997, the actual data falls outside the prediction interval of the `add_arima_forecasts`. On the other hand, the `mult_arima_forecasts` manages to capture the actual data within the 95% prediction interval for the entire duration.
+
+It is evident from these plots above that the Additive Linear Model of $CO_2$ aligns best with the actual observed data, clearly defying the expectations in 1997. The Keeling Curve continues to grow with the with little change in trend and seasonality. The accuracy for these models are compared in the next section.
+
+## Evaluate the Performance (4b)
+
+```{r echo=FALSE, eval=FALSE}
+# Get date when CO2 levels hit 420 
+min(co2_monthly$date[co2_monthly$value >= 420])
+```
+The prediction made in 1997 estimated that $CO_2$ levels would hit 420 ppm by April 2039. However, when compared with the realized data, this $CO_2$ level was already reached in April 2022, indicating that the 1997 prediction was not very accurate, as it underestimated the rate of $CO_2$ increase by a margin of 17 years!
+
+```{r echo=FALSE}
+# Performance comparison of forecasts with realized data
+linear_add_rmse <- accuracy(linear_add_forecasts, co2_monthly)$RMSE
+linear_mul_rmse <- accuracy(linear_mult_forecasts, co2_monthly)$RMSE
+arima_add_rmse <- accuracy(add_arima_forecasts, co2_monthly)$RMSE
+arima_mul_rmse <- accuracy(mult_arima_forecasts, co2_monthly)$RMSE
+
+accuracy_kable <- data.frame(
+  Name = c("Linear Additive", "Linear Multiplicative", "ARIMA Additive", "ARIMA Multiplicative"),
+  RMSE = c(linear_add_rmse, linear_mul_rmse, arima_add_rmse, arima_mul_rmse))
+kable(accuracy_kable)
+```
+To check the performance of the models, we perform accuracy tests on each of them for the entire forecasted period. We compare the `RMSE`, which is the measure of the average deviation from the actual values, between these models. We see that the Linear Additive model has the lowest `RMSE` of `0.76` indicating a better fit to the realized data compared to the other models. 
+
+# Train best models (5b)
+```{r message=FALSE, echo=FALSE}
+# Create missing days
+co2_present_complete <- co2_present %>% fill_gaps() 
+
+# Interpolate missing values
+data_interpolated <- co2_present_complete %>% fill(value, .direction = "downup") 
+```
+
+```{r message=FALSE, echo=TRUE}
+# Seasonally Adjust
+co2_present_sa <- data_interpolated %>%
+  model(STL(value ~ season(window = "periodic"))) %>%
+  components() %>%
+  select(index, trend, season_adjust = season_adjust)
+```
+
+```{r message=FALSE, echo=FALSE}
+# Non-Seasonally Adjusted Test-train split
+split_point <- nrow(data_interpolated) - 104
+training <- data_interpolated[1:split_point, ]
+test <- data_interpolated[(split_point + 1):nrow(data_interpolated), ]
+
+# Seasonally Adjusted Test-train split
+split_point_sa <- nrow(co2_present_sa) - 104
+training_sa <- co2_present_sa[1:split_point_sa, ]
+test_sa <- co2_present_sa[(split_point_sa + 1):nrow(co2_present_sa), ]
+```
+
+```{r fig.width=6, fig.height=1.8, echo=FALSE}
+acf_plot_sa <- training_sa %>%
+  ACF(season_adjust, lag_max = 144) %>%
+  autoplot() + labs(title = TeX(r'(ACF and PACF of SA Model of $CO_2$ Levels)'))
+pacf_plot_sa <- training_sa %>%
+  PACF(season_adjust) %>% autoplot()
+(acf_plot_sa | pacf_plot_sa)
+```
+On the seasonally adjusted data, the ACF and PACF plots show the presence of unit root. The original data (Non-seasonally adjusted (NSA)) and the seasonally adjusted (SA) data are both split into train and test set, and are used to fit ARIMA models.
+
+```{r eval=FALSE, warning=FALSE}
+fit_arima_wo_log <- training %>%
+                  model(auto_mod_aic = ARIMA(value ~ 0 + pdq(0:5, 0:2, 0:5) + 
+                                                  PDQ(0:5,0:2,0:5), ic="aic", 
+                                                  stepwise=F, greedy=F))
+fit_arima_sa_test2 <- training_sa %>%
+                  model(auto_mod_aic = ARIMA(season_adjust ~ 0 + pdq(0:5, 0:2, 0:5) + 
+                                                  PDQ(0:5, 0, 0:5), ic="aic", 
+                                                  stepwise=F, greedy=F))
+```
+
+
+```{r eval=FALSE, echo=FALSE}
+report(fit_arima_wo_log) # we can omit this cell. Won't have space for everything. Just mention the model in the text.
+report(fit_arima_sa_test2)
+
+fit_arima_wo_log %>% gg_tsresiduals()
+fit_arima_sa_test2%>% gg_tsresiduals()
+
+resid1<-fit_arima_wo_log %>% select(auto_mod_aic) %>%
+  augment() %>%
+  select(.resid)
+Box.test(resid1$.resid, lag = 10, type = "Ljung-Box")
+
+resid2<-fit_arima_sa_test2 %>% select(auto_mod_aic) %>%
+  augment() %>%
+  select(.resid)
+Box.test(resid2$.resid, lag = 10, type = "Ljung-Box")
+```
+We use the auto ARIMA function to find the best models in a limited search space. The function suggests a non-seasonal ARIMA model `ARIMA(0,1,3)(2,1,0)[52]` and a seasonal ARIMA model `ARIMA(1,1,3)(2,0,0)[52]`. The residuals of both these models posses a normal distribution and the Ljung-Box test provides a non-significant p-value, failing to reject the null that the data are IID. 
+
+```{r eval=FALSE, echo=FALSE}
+save(fit_arima_wo_log, file="m1")
+save(fit_arima_sa_test2, file="m2")
+```
+
+```{r echo=FALSE}
+load("m1")
+load("m2")
+```
+
+```{r echo=FALSE, eval=TRUE, fig.width=6, fig.height=3.5}
+# NSA ARIMA in-sample
+forecast1 <- forecast(fit_arima_wo_log, new_data = test)
+plot1 <- forecast1 %>% autoplot(training) + labs(title = "NSA ARIMA Forecast" )
+
+forecast2 <- forecast(fit_arima_sa_test2, new_data = test_sa) 
+plot2 <- forecast2 %>% autoplot(training_sa) + labs(title = "SA ARIMA Forecast" )
+```
+
+```{r echo=FALSE, eval=TRUE, fig.width=6, fig.height=2.8}
+plot1 / plot2
+```
+
+```{r echo=FALSE, eval=FALSE, fig.width=6, fig.height=4.5}
+accuracy(forecast1, test)
+accuracy(forecast2, test_sa) 
+```
+
+The NSA model has a lower RMSE of `0.78` compared to the RMSE of the SA model, `3.50`. Which means the NSA ARIMA model `ARIMA(0,1,3)(2,1,0)[52]` fits the data better and would be our preferred choice of model.
+
+```{r fig.width=6, fig.height=2.5}
+# Fit ploynomial
+fit_poly <- training_sa %>%
+  model(model = TSLM(season_adjust ~ trend()+I(trend()^2))) 
+# Forecast with polynomial model
+forecast_poly <- forecast(fit_poly, new_data = test_sa)
+forecast_poly_plot <- forecast_poly %>% autoplot(training_sa) + 
+  labs(title="Polynomial Model Forecast")
+forecast_poly_plot
+```
+```{r echo=FALSE, eval=FALSE, fig.width=6, fig.height=4.5}
+accuracy(forecast_poly, test_sa)
+```
+
+```{r include=FALSE, echo=FALSE, eval=FALSE}
+# Seasonally Adjusted Vs. Polynomial Model $CO_2$ Levels
+fit_poly_plot1 <- augment(fit_poly)%>%
+  ggplot(aes(x = index)) +
+  geom_line(aes(y = season_adjust, colour = "Data")) +
+  geom_line(aes(y = .fitted, colour = "Fitted")) +
+  labs(y = TeX(r'($CO_2$ Levels)'), x = "Time",
+       title = TeX(r'(Seasonally Adjusted Vs. Polynomial Model $CO_2$ Levels)'))
+#fit_poly_plot1
+```
+The forecast plot for the polynomial model is as above. We get an `RMSE` of 1.39 from the polynomial model fitted on the seasonally adjusted data. In comparison, our NSA `ARIMA(0,1,3)(2,1,0)[52]` has a lower RMSE of `0.78`, indicating a better fit, therefore a better choice (unless we're over-fitting). 
+
+
+# How bad could it get? (6b)
+```{r message=FALSE, echo=FALSE}
+future_years_2130 <- 
+  data.frame(date = seq.Date(from = as.Date(max(training$index) + 
+                                              month(1)), 
+                             to = as.Date(yearweek("2130 Dec")), 
+                             by = "1 week")) %>% 
+  mutate(date = yearweek(date)) %>%
+  as_tsibble(index=date)
+```
+
+```{r eval = FALSE, message=FALSE, warning=FALSE}
+# Forecast from NSA Model
+extended_forecast <- fit_arima_wo_log %>%  forecast(future_years_2130, 20)
+```
+
+```{r eval=FALSE, echo=FALSE}
+# Output omitted for the sake of space
+min(extended_forecast$date[extended_forecast$.mean >= 420])
+max(extended_forecast$date[extended_forecast$.mean <= 421])
+min(extended_forecast$date[extended_forecast$.mean >= 500])
+max(extended_forecast$date[extended_forecast$.mean <= 501])
+```
+According to our model, we predict that $CO_2$ is expected to be at 420 ppm from 12th week of 2022 to the 42nd week of 2024, and at 500 ppm from the 6th week of 2057 to the 36th week of 2059.
+
+```{r echo=FALSE, eval=FALSE}
+extended_forecast$.mean[extended_forecast$date == yearweek("2122 Dec")]
+```
+The $CO_2$ level prediction for the year 2122 is 651.89 ppm. Again, similar to the 1997 model and report, our predictions would be somewhat valid for the nearer future. A prediction on year 2122 is far too much into the future and comes with a high confidence interval and inaccuracy, which would very likely be unacceptable. Therefore, we are not really confident with the output especially considering current geopolitical efforts to reduce carbon emissions, meaning the current trend may not continue to grow. 
+

@@ -1,0 +1,461 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r load packages, echo = FALSE, message = FALSE}
+library(tidyverse)
+library(tsibble)
+library(latex2exp)
+#install.packages('feasts')
+library(feasts)
+#install.packages('forecast')
+library(forecast)
+library(patchwork)
+library(fable)
+
+#install.packages('gridExtra')
+library(gridExtra)
+
+theme_set(theme_minimal())
+knitr::opts_chunk$set(dpi=1000)
+```
+
+# Introduction
+
+The Keeling Curve, initiated in 1958 by Dr. Charles David Keeling at the Mauna Loa Observatory, represents the ongoing record of atmospheric carbon dioxide (CO2) concentrations. Through precise measurements and the identification of atmospheric background levels, Keeling provided the first concrete evidence of the rise in CO2 levels, correlating with human activities like industrialization and fossil fuel combustion. This groundbreaking work highlighted the significant role of CO2 as a greenhouse gas contributing to global warming and climate change, marking it as one of the 20th century's pivotal scientific achievements. Our analysis aims to extend Keeling's legacy by applying models to forecast future CO2 concentrations, thereby underscoring the urgent need for discussions on mitigating climate change impacts and examining human influences on the climate. This endeavor seeks not only to predict CO2 levels but also to inform ongoing and future research within our laboratory on global climate dynamics.
+
+# Exploratory Data Analysis
+
+## About the Data
+
+This analysis utilizes data sourced from the National Oceanic and Atmospheric Administration's Global Monitoring Laboratory (GML). The GML is dedicated to researching significant issues such as greenhouse gases and the recovery of stratospheric ozone. As stated in the introduction, this data is gathered from the Mauna Loa observatory in Hawaii, a location favored for its ideal altitude which allows for the measurement of air masses over extensive areas. The data undergoes frequent calibration and comparison, ensuring an accuracy superior to 0.2 ppm (parts per million). The primary objective of these measurements is to determine the quantity of $CO_2$ that has been either added or removed from the atmosphere. These measurements reflect the mole fraction of$CO_2$ in dry air, which gives us a clear picture of the changes in $CO_2$ levels.
+
+Let us now investigate our data.
+
+## Graphs and Visualizations
+
+First let's visualize the entire curve up until now. We can observe what appears to be an upward trend. To better observe this, let's average the data by year and plot it. We can also see a periodic pattern that appears to be throughout the year. To illustrate this, let's look at a two-year window of the previous two years, 1996-1997.
+
+```{r echo=FALSE, fig.height=5, fig.width=12}
+plot <- tsibble::as_tsibble(co2) %>%
+  ggplot() + 
+  aes(x=index, y=value) + 
+  geom_line(color = 'steelblue') +
+  labs(
+    title = TeX(r'(Monthly Mean $CO_2$)'),
+    subtitle = 'The "Keeling Curve"',
+    x = 'Month and Year',
+    y = TeX(r'($CO_2$ PPM)')
+  )
+
+
+annual_avg_plot <- as_tsibble(co2) %>%
+  mutate(year = year(index)) %>%
+  index_by(year) %>% # monthly aggregates
+  summarise(avg_total = mean(value)) %>%
+  ggplot(aes(x = year, y = avg_total)) +
+  geom_line(color = 'steelblue') +
+  labs(
+    title = TeX(r'(Yearly Mean $CO_2$ from 1958-1997)'),
+    x = 'Year',
+    y = TeX(r'($CO_2$ parts per million)')
+  )
+
+
+periodic_trend <- as_tsibble(co2) %>% 
+  filter(year(index) >= 1996 & year(index) <= 1997) %>%
+  ggplot() + 
+  aes(x=index, y=value) + 
+  geom_line(color = 'pink') +
+  labs(
+    title = TeX(r'(Monthly Mean $CO_2$ from 1996-1997)'),
+    subtitle = 'The "Keeling Curve"',
+    x = 'Month and Year',
+    y = TeX(r'($CO_2$ parts per million)')
+  )
+
+plot | annual_avg_plot | periodic_trend
+
+```
+
+We seem to observe that the $\text{CO}_2$ levels peak in the summer and fall in the winter, a consistent seasonal effect that appears to be yearly. We can see that the monthly $\text{CO}_2$ levels peak around May and trough around September.
+
+The upward trend and seasonality imply that we may have strong autocorrelation, so we're going to plot the ACF and PACF.
+
+We see from the lagged scatterplots that although the series observations of CO2 are positively associated with their lags, the positive associations are especially strong for Lag 1 and Lag 12. This is evidence of strong seasonality with a period of 12. In this case, we would expect to see similar CO2 levels 12 months after the January of a given year - January of next year. Similarly, we could expect to see similar CO2 levels 12 months after the May of a given year - May of next year.
+
+```{r fig.width=8, fig.height=2, echo=FALSE}
+acf_plot <- as_tsibble(co2) %>%
+  ACF(value, lag_max = 144) %>%
+  autoplot()
+
+pacf_plot <- as_tsibble(co2) %>%
+  PACF(value) %>%
+  autoplot()
+
+acf_plot | pacf_plot
+```
+
+The ACF max lags has been extended to 144. This is an atypical visualization, but serves to illustrate the very slow linear decay of the ACF. This indicates a very strong autocorrelation, that past values have a significant effect on future values. It also confirms the overall upward trend we observed when visualizing the annualized averages.
+
+We can also see a slightly 'waviness' in the ACF plot, reflective of the seasonality we see in the overall plot. From the PACF, we see that the first lag has a PACF value of nearly 1, and then it drops off very quickly. However, values are still outside of the confidence intervals. The PACF more clearly illustrates the seasonal pattern with its oscillations around 0. This PACF indicates at least a partial autoregressive component to the data.
+
+Let's decompose the time series to examine if a multiplicative or additive model is more appropriate.
+
+```{r echo=FALSE, fig.height=5, fig.width=12}
+dcmp_add <- as_tsibble(co2) %>%
+  model(add = classical_decomposition(value, type = "additive"))
+
+dcmp_multi <- as_tsibble(co2) %>% mutate(log_value = log(value)) %>%
+  model(stl = STL(log_value))
+
+p33 <- components(dcmp_add) %>% autoplot()
+
+p34<- components(dcmp_add) %>%
+  ACF(random) %>%
+  autoplot() + labs(title="Residuals Additive Decomp.")
+
+p35 <- components(dcmp_multi) %>% autoplot()
+
+p36<- components(dcmp_multi)%>%
+  ACF(remainder) %>%
+  autoplot() + labs(title="Residuals Multiplicative Decomp.")
+
+(p33 + p34) / (p35 + p36)
+```
+
+Although both residual ACF plots do not suggest perfect stationarity of the residuals, we see fewer significant autocorelations among the residuals of the multiplicative model.
+
+# Linear Time Trend Model
+
+## Fitting a linear time trend model to the data
+
+First let's fit a linear model to the data in an attempt to capture the underlying trend.
+
+```{r echo=FALSE}
+# Fit linear model
+linear_model <- lm(value ~ index, data = as_tsibble(co2))
+summary(linear_model)
+```
+
+The R-squared indicates a good fit, and there is a low standard error. Let's now plot the residuals to examine this further.
+
+```{r echo=FALSE, fig.height=5, fig.width=12}
+linear_model <- lm(value ~ index, data = as_tsibble(co2))
+quadratic_model <- lm(value ~ poly(index, 2), data = as_tsibble(co2))
+par(mfrow=c(1,2))
+linear_model$residuals %>% plot()
+quadratic_model$residuals %>% plot()
+```
+
+The residuals in the first plot show a clear deviation from linearity. In fact they seem to have some sort of quadratic curve, so let's next fit a quadratic time trend model using the `poly` function in R. The $R^2$ is slightly improved here. Let's look at the residuals and see how the model did. These residuals look much better and show less of a pattern.
+
+Our earlier analysis did not indicate a strict preference for a multiplicative or linear model when decomposing the data. So, we'll fit a quadratic model with seasonal values to both the raw atmospheric $\text{CO}_2$ ppm and the log of the value.
+
+In each case, the ACF of the residuals still shows significant lag, indicating that they are not yet stationary. The seasonality appears to still be present in the additive residuals while the curve is more linear for the multiplicative(logarithmic) residuals. The residuals are approximately normally distributed for each model. We do not expect this to be the best model, but let's forecast through the year 2020 with the multiplicative polynomial time trend model.
+
+```{r echo=FALSE}
+
+future_years_2020 <- 
+  data.frame(date = seq.Date(from = as.Date(max(as_tsibble(co2)$index) + 
+                                              month(1)), 
+                             to = as.Date(yearmonth("2020 Dec")), 
+                             by = "1 month")) %>% 
+  mutate(date = yearmonth(date)) %>%
+  as_tsibble(index=date)
+```
+
+```{r echo=FALSE, fig.height=5, fig.width=12}
+
+# task 2a
+
+fit_quadratic_season_mult <- as_tsibble(co2) %>% mutate(value = log(value)) %>%
+  model(trend_model = TSLM(value ~ trend()+I(trend()^2)+ season())) 
+
+fit_quadratic_season_add <- as_tsibble(co2) %>%
+  model(trend_model = TSLM(value ~ trend()+I(trend()^2)+ season())) 
+
+```
+
+```{r echo=FALSE, fig.height=2.5, fig.width=12, message=FALSE, warning=FALSE}
+
+# task 2a
+
+
+mult_plot<-augment(fit_quadratic_season_mult)%>%
+  ggplot(aes(x = index)) +
+  geom_line(aes(y = value, colour = "Data")) +
+  geom_line(aes(y = .fitted, colour = "Fitted")) +
+  labs(y = TeX(r'(Log $CO_2$ PPM)'), x = "Time",
+       title = "The natural logarithm of the Keeling Curve")
+
+add_plot<-augment(fit_quadratic_season_add)%>%
+  ggplot(aes(x = index)) +
+  geom_line(aes(y = value, colour = "Data")) +
+  geom_line(aes(y = .fitted, colour = "Fitted")) +
+  labs(y = TeX(r'($CO_2$ PPM)'), x = "Time",
+       title = "The Keeling Curve")
+
+
+# Data for autoplot()
+co2_tsib <- as_tsibble(co2) %>% index_by(date=index)
+
+# Generate forecast
+fit_quadratic_season_mult_plot <- fit_quadratic_season_mult %>%
+  forecast(future_years_2020, 20) %>% 
+  mutate(.mean = exp(.mean), value = exp(value)) %>% 
+  autoplot(co2_tsib) + ggtitle("Forecast from 1997 to 2020") +
+    labs(y = TeX(r'($CO_2$ PPM)'), x = "Time")
+
+
+mult_plot | fit_quadratic_season_mult_plot
+```
+
+The plot above shows the forecasts produced by the quadratic time trend model. We see that the model forecasts include a consistent upward trend with consistent fluctuations.
+
+```{r fig.width=6, fig.height=3, echo=FALSE}
+fit_quadratic_season_mult %>% gg_tsresiduals()
+```
+
+Now that we've fit the decomposed quadratic model, let's also fit ARIMA models to the data. First let's plot the time series again for convenience.
+
+```{r fig.width=6, fig.height=2, echo=FALSE}
+as_tsibble(co2) %>% autoplot(value)
+```
+
+If we take a seasonal difference followed by a first difference, we get the resulting time series, PACF, and ACF plots below for the raw and log of the data.
+
+```{r fig.width=6, fig.height=2, echo=FALSE, warning=FALSE}
+as_tsibble(co2) |>
+  gg_tsdisplay(difference(value, 12) |> difference(),
+               plot_type='partial', lag=50) +
+  labs(title = "Double differenced", y="")
+```
+
+```{r fig.width=6, fig.height=2, echo=FALSE, warning=FALSE}
+as_tsibble(co2) |>
+  mutate(log_value = log(value)) |>
+  gg_tsdisplay(difference(value, 12) |> difference(),
+               plot_type='partial', lag=50) +
+  labs(title = "Double differenced", y="")
+```
+
+The plots above show that a seasonal difference followed by a first difference would make the series appear stationary, as the resulting series centers consistently around zero with only a few significant autocorrelations. This influences the choice of the non-seasonal difference d and the seasonal difference D taking on values of 1 for our models. We additionally see significant partial autocorrelations at roughly 3 intervals of 12 after the first lag, indicating a seasonal AR component of 3. This is how we decided for reasonable search values of also run automated model selection procedures with reasonable values of p, d, q, as well as P, D, Q. Initial EDA does not strongly suggest an additive model over a multiplicative one, so we will evaluate both.
+
+We evaluated the residual plots and the Box-Ljung tests at 1 and 10 lags to determine whether the models were worth continuing to evaluate with. The tests are not shown for brevity in this report, but are included in the code. The Box-Ljung tests indicated that all the models generated independent residuals and could be used for forecasting.
+
+```{r echo=FALSE, eval=FALSE}
+# task 3a
+fit_arima_add <- as_tsibble(co2) %>%
+                 model(add_model = ARIMA(value ~ 1, ic = 'aic', stepwise = F, greedy = F)
+                       )
+
+fit_arima_mult <- as_tsibble(co2) %>%
+                  mutate(value = log(value)) %>%
+                  model(add_model = ARIMA(value ~ 1, ic = 'aic', stepwise = F, greedy = F),
+                        mod_1 = ARIMA(value ~ 0 + pdq(3,1,0) + PDQ(3, 0, 0)),
+                        mod_2 = ARIMA(value ~ 0 + pdq(3,1,0) + PDQ(1, 1, 0)),
+                        auto_mod_aic = ARIMA(value ~ 0 + pdq(0:5, 0:2, 0:5) + 
+                                                  PDQ(0:5,0:2,0:5), ic="aic", 
+                                                  stepwise=F, greedy=F),
+                        auto_mod_bic = ARIMA(value ~ 0 + pdq(0:5, 0:2, 0:5) + 
+                                                  PDQ(0:5,0:2,0:5), ic="bic", 
+                                                  stepwise=F, greedy=F)
+                        )
+```
+
+```{r echo=FALSE, eval=FALSE}
+
+fit_arima_add %>% gg_tsresiduals()
+
+report(fit_arima_add)
+```
+
+```{r echo=FALSE, eval=FALSE}
+
+fit_arima_mult %>% select(add_model) %>% gg_tsresiduals()
+
+report(fit_arima_mult)
+```
+
+```{r echo=FALSE, eval=FALSE}
+
+fit_arima_mult %>% select(mod_1) %>% gg_tsresiduals()
+
+report(fit_arima_mult)
+```
+
+```{r echo=FALSE, eval=FALSE}
+fit_arima_mult %>% select(auto_mod_aic) %>% gg_tsresiduals()
+```
+
+```{r echo=FALSE, eval=FALSE}
+
+resid.add.ts<-fit_arima_add %>%
+  augment() %>%
+  select(.resid) %>%
+  as.ts()
+
+
+Box.test(resid.add.ts, lag = 10, type = "Ljung-Box")
+```
+
+```{r echo=FALSE, eval=FALSE}
+
+resid.mult.ts<-fit_arima_mult %>% select(mod_1) %>%
+  augment() %>%
+  select(.resid) %>%
+  as.ts()
+
+
+Box.test(resid.mult.ts, lag = 10, type = "Ljung-Box")
+```
+
+```{r echo=FALSE, eval=FALSE}
+resid.ts<-fit_arima_mult %>% select(auto_mod_aic) %>%
+  augment() %>%
+  select(.resid) %>%
+  as.ts()
+
+Box.test(resid.ts, lag = 10, type = "Ljung-Box")
+```
+
+```{r echo=FALSE, eval=FALSE}
+resid.ts<-fit_arima_mult %>% select(auto_mod_bic) %>%
+  augment() %>%
+  select(.resid) %>%
+  as.ts()
+
+Box.test(resid.ts, lag = 10, type = "Ljung-Box")
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, eval=FALSE}
+
+future_years_2022 <- 
+  data.frame(date = seq.Date(from = as.Date(max(as_tsibble(co2)$index) + 
+                                              month(1)), 
+                             to = as.Date(yearmonth("2022 Dec")), 
+                             by = "1 month")) %>% 
+  mutate(date = yearmonth(date)) %>%
+  as_tsibble(index=date)
+
+fit_arima_add %>%
+  forecast(future_years_2022, 20) %>% 
+  autoplot(co2_tsib) + ggtitle("Forecast from 1997 to 2022") +
+    labs(y = TeX(r'($CO_2$ PPM)'), x = "Time")
+```
+
+```{r echo=FALSE, eval=FALSE}
+
+#arim_mult_add_plot <- fit_arima_mult %>% select(add_model) %>%
+#forecast(future_years_2022, 20) %>% mutate(.mean = exp(.mean), value = exp(value)) %>% 
+#  autoplot(co2_tsib) + ggtitle("Forecast from 1997 to 2022 (Multiplicative ARIMA(4,0,0)(2,1,0)[12] Model)") +
+#    labs(y = TeX(r'($CO_2$ PPM)'), x = "Time")
+
+arima_mult_1_plot <- fit_arima_mult %>% select(mod_1) %>%
+forecast(future_years_2022, 20) %>% mutate(.mean = exp(.mean), value = exp(value)) %>% 
+  autoplot(co2_tsib) + ggtitle("Forecast from 1997 to 2022 (Multiplicative ARIMA(3,1,0)(3,0,0)[12] Model)") +
+    labs(y = TeX(r'($CO_2$ PPM)'), x = "Time")
+
+#fit_arima_mult %>% select(mod_2) %>%
+#forecast(future_years_2022, 20) %>% mutate(.mean = exp(.mean), value = exp(value)) %>% 
+#  autoplot(co2_tsib) + ggtitle("Forecast from 1997 to 2022 (Multiplicative ARIMA(3,1,0)(1,1,0)[12] Model)") +
+#    labs(y = TeX(r'($CO_2$ PPM)'), x = "Time")
+
+arima_mult_aic_plot <- fit_arima_mult %>% select(auto_mod_aic) %>%
+forecast(future_years_2022, 20) %>% mutate(.mean = exp(.mean), value = exp(value)) %>% 
+  autoplot(co2_tsib) + ggtitle("Forecast from 1997 to 2022 (Multiplicative ARIMA(3,1,1)(2,1,0)[12] Model)") +
+    labs(y = TeX(r'($CO_2$ PPM)'), x = "Time")
+
+#fit_arima_mult %>% select(auto_mod_bic) %>%
+#forecast(future_years_2022, 20) %>% mutate(.mean = exp(.mean), value = exp(value)) %>% 
+#  autoplot(co2_tsib) + ggtitle("Forecast from 1997 to 2022 (Multiplicative ARIMA(1,1,1)(2,1,0)[12] Model)") +
+#    labs(y = TeX(r'($CO_2$ PPM)'), x = "Time")
+
+grid.arrange(arima_mult_1_plot, arima_mult_aic_plot, nrow=2)
+
+```
+
+```{r echo=FALSE, warning=FALSE, eval=FALSE}
+# task 4a
+future_years_2110 <- 
+  data.frame(date = seq.Date(from = as.Date(max(as_tsibble(co2)$index) + 
+                                              month(1)), 
+                             to = as.Date(yearmonth("2110 Dec")), 
+                             by = "1 month")) %>% 
+  mutate(date = yearmonth(date)) %>%
+  as_tsibble(index=date)
+
+extended_forecast_add <- fit_arima_add %>%
+  forecast(future_years_2110, 20)
+
+extended_forecast_mult <- fit_arima_mult %>%
+  forecast(future_years_2110, 20)
+
+extended_forecast_linear_add <- fit_quadratic_season_add %>%
+  forecast(future_years_2110, 20)
+
+extended_forecast_linear_mult <- fit_quadratic_season_mult %>%
+  forecast(future_years_2110, 20)
+
+min(extended_forecast_add$date[extended_forecast_add$.mean >= 420])
+max(extended_forecast_add$date[extended_forecast_add$.mean <= 421])
+min(extended_forecast_add$date[extended_forecast_add$.mean >= 500])
+max(extended_forecast_add$date[extended_forecast_add$.mean <= 501])
+
+min(extended_forecast_mult$date[extended_forecast_mult$.mean %>% exp() >= 420])
+max(extended_forecast_mult$date[extended_forecast_mult$.mean %>% exp() <= 421])
+min(extended_forecast_mult$date[extended_forecast_mult$.mean %>% exp() >= 500])
+max(extended_forecast_mult$date[extended_forecast_mult$.mean %>% exp() <= 501])
+
+min(extended_forecast_linear_add$date[extended_forecast_linear_add$.mean >= 420])
+max(extended_forecast_linear_add$date[extended_forecast_linear_add$.mean <= 421])
+min(extended_forecast_linear_add$date[extended_forecast_linear_add$.mean >= 500])
+max(extended_forecast_linear_add$date[extended_forecast_linear_add$.mean <= 501])
+
+min(extended_forecast_linear_mult$date[extended_forecast_linear_mult$.mean %>% exp() >= 420])
+max(extended_forecast_linear_mult$date[extended_forecast_linear_mult$.mean %>% exp() <= 421])
+min(extended_forecast_linear_mult$date[extended_forecast_linear_mult$.mean %>% exp() >= 500])
+max(extended_forecast_linear_mult$date[extended_forecast_linear_mult$.mean %>% exp() <= 501])
+
+
+```
+
+According to our additive ARIMA model, we predict that $CO_2$ is expected to be at 420 ppm from April 2039 to September 2044, and at 500 ppm from April 2102 to October 2107. Our multiplicative ARIMA model predicts 420 ppm from Apr 2027 to Oct 2038, and 500 ppm from May 2064 to Oct 2084. The additive linear model predicts 420 ppm to be reached from May 2022 to Oct 2024, and 500 ppm to be present from Apr 2051 to Oct 2052. The linear multiplicative model predicts 420 ppm to be reached from May 2020 to Nov 2022, and 500 ppm to be reached from March 2045 to Oct 2046
+
+```{r echo=FALSE, eval=FALSE}
+
+extended_forecast_add$.mean[extended_forecast_add$date == yearmonth("2100 Dec")]
+extended_forecast_mult$.mean[extended_forecast_mult$date == yearmonth("2100 Dec")] %>% exp()
+extended_forecast_linear_add$.mean[extended_forecast_linear_add$date == yearmonth("2100 Dec")]
+extended_forecast_linear_mult$.mean[extended_forecast_linear_mult$date == yearmonth("2100 Dec")] %>% exp()
+```
+
+For the year 2100, our additive ARIMA model predicts 495.1 ppm. Our multiplicative ARIMA model predicts 534 ppm. Our linear additive model predicts 686 ppm. Our linear log model predicts 855 ppm.
+
+According to the data we have, keeping all else constant, our predictions would be somewhat valid for years nearer to the current year, 1997. A prediction on year 2100 is far too much into the future and comes with a high confidence interval and inaccuracy, which would very likely be unacceptable. Another possible approach to test the prediction performance would be to fit this model on a train-test split and evaluate the model on the test split nearer to the current date. Of course, this would be done on advice from our senior statisticians.
+
+```{r echo=FALSE, eval=FALSE}
+# Save forecast objects for future retrieval
+linear_mult_forecasts <- fit_quadratic_season_mult %>%
+  forecast(future_years_2020, 20) %>% 
+  mutate(.mean = exp(.mean), value = exp(value))
+
+linear_add_forecasts <- fit_quadratic_season_add %>%
+  forecast(future_years_2020, 20)
+
+add_arima_forecasts <- fit_arima_add %>%
+  forecast(future_years_2022, 20)
+
+mult_arima_forecasts <- fit_arima_mult %>% select(mod_1) %>%
+forecast(future_years_2022, 20) %>% mutate(.mean = exp(.mean), value = exp(value))
+
+
+
+save(add_arima_forecasts, file = "add_arima_forecasts.RData")
+save(mult_arima_forecasts, file = "mult_arima_forecasts.RData")
+save(linear_mult_forecasts, file = "linear_mult_forecasts.RData")
+save(linear_add_forecasts, file = "linear_add_forecasts.RData")
+```
