@@ -1,0 +1,38 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: aquon-vs
+  namespace: aquon
+spec:
+  hosts:
+    - aquon.mids255.com
+  gateways:
+    - istio-ingress/aquon-gateway
+  http:
+    - match:
+        - uri:
+            prefix: "/project/"
+        - uri:
+            prefix: "/project"
+      rewrite:
+        uri: "/"
+      route:
+        - destination:
+            host: final-project-prediction-service
+            port:
+              number: 8000
+    - match:
+        - uri:
+            prefix: "/lab4/"
+        - uri:
+            prefix: "/lab4"
+      rewrite:
+        uri: "/"
+      route:
+        - destination:
+            host: prediction-service
+            port:
+              number: 8000
+        
+

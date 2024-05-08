@@ -1,0 +1,13 @@
+distilbert-base-uncased-finetuned-sst2/
+*.pyc
+.DS_Store
+.env
+istio*
+in_class
+inclass
+*.pkl
+__pycache__/
+.DS_STORE
+.venv/
+*.csv
+distilbert-base-uncased-finetuned-sst2
