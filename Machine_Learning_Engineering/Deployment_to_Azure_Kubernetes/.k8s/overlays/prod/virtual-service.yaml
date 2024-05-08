@@ -1,0 +1,29 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: lab4-external-access
+spec:
+  hosts:
+    - aquon.mids255.com
+  gateways:
+    - istio-ingress/aquon-gateway
+  http:
+    - match:
+        - uri:
+            exact: /hello
+        - uri:
+            exact: /predict
+        - uri:
+            exact: /bulk-predict
+        - uri:
+            prefix: /health
+        - uri:
+            prefix: /docs
+        - uri:
+            prefix: /openapi.json
+      route:
+        - destination:
+            host: prediction-service
+            port:
+              number: 8000
