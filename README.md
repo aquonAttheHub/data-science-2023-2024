@@ -1,7 +1,7 @@
 # data-science
 Anson B. Quon
 
-Data Science Portfolio
+Data Science and Engineering Portfolio
 
 aquon@berkeley.edu
 
